@@ -2,11 +2,11 @@ import instance from "./ApiInstacnce";
 export default {
   Register: async (payload: object) => {
     const response = await instance.post("auth/register", payload);
-    return response;
+    return response.data;
   },
-  // User side
-  Login: async (payload: any) => {
-    const response = await instance.post("/login", payload);
+ 
+  Login: async (payload: object) => {
+    const response = await instance.post("auth/login", payload);
     return response.data;
   },
 
