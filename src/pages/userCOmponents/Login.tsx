@@ -1,3 +1,4 @@
+
 import {Formik,Field,ErrorMessage ,Form} from "formik"
 import * as Yup from "yup"
 import {Link} from "react-router-dom"
@@ -80,7 +81,7 @@ const Login = () => {
                 </h1>
                 <div className="items-center justify-center inline-flex">
                     <GoogleOAuthProvider
-                  clientId= '461010706542-vhq5kmrvv1c8efacakc5i8gofhrc2317.apps.googleusercontent.com'
+                  clientId= {import.meta.env.VITE_KEY}
                 >
                   <GoogleLogin
                        theme='filled_black'

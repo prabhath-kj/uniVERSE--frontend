@@ -144,7 +144,7 @@ const SignUp = () => {
                     Getting Started With uniVERSE</h1>
                     <div className="items-center justify-center inline-flex">
                     <GoogleOAuthProvider 
-                      clientId="461010706542-vhq5kmrvv1c8efacakc5i8gofhrc2317.apps.googleusercontent.com"
+                      clientId={import.meta.env.VITE_KEY}
                       >
 
                   <GoogleLogin
