@@ -1,9 +1,16 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import ApiCalls from '../../services/ApiCalls';
-import {Link} from "react-router-dom"
+import {Link,useNavigate} from "react-router-dom"
 import {toast} from "react-toastify"
+import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
+import jwtDecode from 'jwt-decode';
+import { useState,useEffect} from 'react';
+import {useSelector} from "react-redux"
 
+interface RooState{
+  token:string
+}
 
 interface SignUpFormValues {
   username: string;
@@ -39,13 +46,23 @@ const validationSchema = Yup.object({
 
 
 const SignUp = () => {
-  
-  const initialValues: SignUpFormValues = {
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  };
+  const Navigate=useNavigate()
+  const isAuth =Boolean(useSelector((state:RooState)=>state.token))
+
+  useEffect(()=>{
+    if(isAuth){
+      return Navigate("/")
+    }
+  },[])
+ 
+
+  const [initialValues] = useState<SignUpFormValues>({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
 
   const handleSubmit = async (values: SignUpFormValues) => {
     try {
@@ -70,6 +87,38 @@ const SignUp = () => {
     }
   };
   
+  const handleGoogleSignup = async (credentialResponse: { credential?: string | undefined }): Promise<void> => {
+    const token: string | undefined = credentialResponse?.credential;
+  
+    if (token) {
+      try {
+        const data: any = jwtDecode(token);
+        const {message,error} = await ApiCalls.GoogleRegister(data);
+        if (message) {
+          toast(message, {
+           position: 'top-right',
+           hideProgressBar: true,
+           closeOnClick: true,
+           theme: 'dark',
+         });
+       } else {
+         toast(`❌ ${error}`, {
+           position: 'top-right',
+           hideProgressBar: true,
+           closeOnClick: true,
+           theme: 'dark',
+         });
+       }
+      } catch (error) {
+        console.error('Error during Google signup:', error);
+        // Handle the error accordingly
+      }
+    } else {
+      console.log('Token is undefined');
+    }
+  };
+  
+  
 
   return (
     <div>
@@ -93,8 +142,24 @@ const SignUp = () => {
              </div>
              <h1 className="my-6 text-black font-mono text-2xl" >
                     Getting Started With uniVERSE</h1>
-                    <div className="space-x-2">
-                    <button className=" bg-black w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</button>
+                    <div className="items-center justify-center inline-flex">
+                    <GoogleOAuthProvider 
+                      clientId="461010706542-vhq5kmrvv1c8efacakc5i8gofhrc2317.apps.googleusercontent.com"
+                      >
+
+                  <GoogleLogin
+                     theme='filled_black'
+                     size='medium'
+                      shape='circle'
+                      text='signup_with'
+                      onSuccess={handleGoogleSignup}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                
+                </GoogleOAuthProvider>
+                    {/* <button className=" bg-black w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</button> */}
                 </div>
                 <p className="text-black">
                     or continue with
@@ -102,11 +167,11 @@ const SignUp = () => {
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
             <Form className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
               <div className="pt-4">
-                <Field type="text" autoComplete="off" name="username" placeholder="Username" className="block w-full p-2 text-base rounded-sm bg-black" />
+                <Field type="text" autoComplete="off"  name="username" placeholder="Username" className="block w-full p-2 text-base rounded-sm bg-black" />
                 <ErrorMessage name="username" component="div" className="text-red-500" />
               </div>
               <div className="pt-4">
-                <Field type="email" autoComplete="off" name="email" placeholder="Email" className="block w-full p-2 text-base rounded-sm bg-black" />
+                <Field type="email" autoComplete="off"   name="email" placeholder="Email" className="block w-full p-2 text-base rounded-sm bg-black" />
                 <ErrorMessage name="email" component="div" className="text-red-500" />
               </div>
               <div className="pt-4">

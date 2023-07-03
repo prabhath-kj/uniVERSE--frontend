@@ -2,11 +2,14 @@ import axios from "axios";
 
 export const api = axios.create({
   baseURL: "http://localhost:3000/api",
+  timeout: 5000,
 });
+
 
 api.interceptors.request.use(
   (config) => {
-    config.headers["Authorization"] = localStorage.getItem("userAuth");
+    config.headers.Authorization =`Bearer ${localStorage.getItem("userAuth")}`;
+    
     return config;
   },
   function (error: any) {

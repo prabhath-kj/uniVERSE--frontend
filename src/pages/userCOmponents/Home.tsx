@@ -1,11 +1,12 @@
 
-import NavBar from './components/NavBar';
-import SideBar from './components/SideBar';
-import Add from './components/Add'
-import { Outlet } from 'react-router-dom';
+import NavBar from '../../components/NavBar';
+import SideBar from '../../components/SideBar';
+import Test from './Posts';
+import Add from '../../components/Add';
 
 
- const App = () => {
+
+const Home = () => {
   return (
     
 
@@ -18,7 +19,7 @@ import { Outlet } from 'react-router-dom';
           </div>
             </div>
             <div className="w-full sm:w-4/5 overflow-y-auto py-5 px-2  mt-12 scrollbar-hide">
-             <Outlet/>
+              <Test />
             </div>
             <div className="col-span-3 mt-16">
               <Add/>
@@ -29,5 +30,4 @@ import { Outlet } from 'react-router-dom';
   );
 };
 
-export default App
-
+export default Home;

@@ -3,6 +3,12 @@ import * as Yup from "yup"
 import {Link} from "react-router-dom"
 import ApiCalls from "../../services/ApiCalls"
 import { toast } from "react-toastify"
+import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
+import {useDispatch,useSelector} from "react-redux"
+import { setLogin,AuthState } from "../../state"
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+
 
 interface LoginFormValues{
     email:string,
@@ -15,23 +21,40 @@ const validationSchema=Yup.object({
     .required('Email is required'),
     password: Yup.string().required('Password is required'),
 })
+
+
+
 const Login = () => {
+
+    const dispatch=useDispatch()
+    const Navigate=useNavigate()
+    const isAuth =Boolean(useSelector((state:AuthState)=>state.token))
+
     const initialValues:LoginFormValues={
         email:"",
         password:""
     }
+  
 
+    useEffect(()=>{
+        isAuth?Navigate("/"):Navigate('/login')
+     },[isAuth])  
+     
+     
     const handleSubmit=async(values:LoginFormValues)=>{
         try{
-            const {message,data}= await ApiCalls.Login(values) 
-            console.log(data);
-            
+            const {message,token,user}= await ApiCalls.Login(values) 
+            dispatch(setLogin({
+                user:user,
+                token:token
+             }))
+             localStorage.setItem("userAuth",token)
             toast(message, {
-             position: 'top-right',
-             hideProgressBar: true,
-             closeOnClick: true,
-             theme: 'light',
-           });
+                position: 'top-right',
+                hideProgressBar: true,
+                closeOnClick: true,
+                theme: 'light',
+              });
     
         }catch(err){
             console.log(err);
@@ -53,10 +76,38 @@ const Login = () => {
              </div>
                 <h1 className="my-6 text-black font-mono text-2xl" >
                     Welcome Back
-                    <p className="text-sm my-6">Login into your account</p>
+                    <p className="text-sm my-4">Login into your account</p>
                 </h1>
-                <div className="space-x-2">
-                    <button className=" bg-black w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</button>
+                <div className="items-center justify-center inline-flex">
+                    <GoogleOAuthProvider
+                  clientId= '461010706542-vhq5kmrvv1c8efacakc5i8gofhrc2317.apps.googleusercontent.com'
+                >
+                  <GoogleLogin
+                       theme='filled_black'
+                       size='medium'
+                        shape='circle'
+                      onSuccess={async(credentialResponse) => {
+                            const {user,token,message}=await ApiCalls.GoogleLogin({jwt:credentialResponse?.credential})
+                             dispatch(setLogin({
+                                user:user,
+                                token:token
+                             }))
+                             localStorage.setItem("userAuth",token)
+                            toast(message, {
+                                position: 'top-right',
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                theme: 'light',
+                              });
+                            
+                      }}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                
+                </GoogleOAuthProvider>
+                    {/* <button className=" bg-black w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</button> */}
                 </div>
                 <p className="text-black">
                     or continue with
