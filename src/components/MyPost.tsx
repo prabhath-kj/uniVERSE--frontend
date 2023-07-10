@@ -1,22 +1,45 @@
-import {VideoCameraIcon,XCircleIcon} from '@heroicons/react/24/solid'
+import {VideoCameraIcon} from '@heroicons/react/24/solid'
 import  { useState } from 'react';
-import ApiCalls from '../services/ApiCalls';
+import ApiCalls from '../services/user/apiCalls';
 import { useDispatch } from 'react-redux';
-import { setPosts } from '../state';
+import { setPosts } from '../state/user';
 import { toast } from "react-toastify"
+import {useDropzone} from 'react-dropzone';
+import Carousel from './sliderComponent';
 
 
  const PostComponent = () => {
+ 
   const dispatch=useDispatch()
- const [image,setImage]=useState<string|any>(null)
+ const [image,setImage]=useState<string|any>([])
  const [text,setText]=useState<string>("")
  const [selectedImage,setSelectedImage]=useState<any>()
+ 
+
+
+ const { getRootProps, getInputProps} = useDropzone({
+    accept: {
+    'image/jpeg': ['.jpeg', '.png']
+    },
+     multiple: true,
+   onDrop: (acceptedFiles) => {
+    
+    if (acceptedFiles && acceptedFiles.length > 0) {
+        setSelectedImage(acceptedFiles);
+        const newImg= acceptedFiles.map(file => (
+         URL.createObjectURL(file)
+        )
+        );
+        setImage(newImg)
+    }
+  },
+});
 
  const handleSubmit = async(event: React.FormEvent) => {
   event.preventDefault();
   const trimmedText = text.trim();
 
-  if (!image && trimmedText === '') {
+  if (image.length<=0 && trimmedText === '') {
     toast('Please share either an image or text', {
       position: 'bottom-center',
       hideProgressBar: true,
@@ -27,20 +50,33 @@ import { toast } from "react-toastify"
   }
  
   const formData = new FormData();
-  formData.append('file',selectedImage??"");
+  
+  if(selectedImage){
+    selectedImage.forEach((image:any,) => {
+      formData.append('images', image??"",);
+    });
+  }
   formData.append("text",trimmedText)
   setText('');
-  setImage(null);  
+  setImage([]);  
   setSelectedImage(null)
   const {post} =await ApiCalls.CreatePost(formData) 
-  dispatch(setPosts({
-    posts:post
-  })) 
+  
+  if(post){
+    dispatch(setPosts({
+      posts:post
+    })) 
+    return
+  }
+  
 };
-
+ const clearImages=()=>{
+  setImage([])
+ }
 
   return (
   <div className='mt-4'>
+    
   <form className="bg-white shadow rounded-lg mb-6 p-4 w-full ">
     <textarea
       name="message"
@@ -50,16 +86,13 @@ import { toast } from "react-toastify"
       onChange={({target})=>setText(target.value)}
       className="focus:outline-none w-full rounded-lg p-2 text-sm bg-gray-100 border border-transparent placeholder-gray-400"
     ></textarea>
-      {image && (
-        <div className="w-32 h-32 relative mt-1">
-        <XCircleIcon className="absolute top-0 right-0 w-6 h-6 text-gray-500 cursor-pointer" onClick={() => { setImage(null) }} />
-        <img src={image} alt="Preview" className="w-24 h-24 object-cover rounded-lg" />
-      </div>
-       )}
+    <div className="flex flex-col">
+    {image.length>0 && <Carousel image={image} clearImages={clearImages}/>}
+   </div>
     <footer className="flex justify-between mt-2">
       <div className="flex gap-2">
           <label htmlFor="imageUpload">
-          <span className="flex items-center hover:bg-black hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-black cursor-pointer">
+          <span className="flex items-center hover:bg-black hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-black cursor-pointer" {...getRootProps()}>
 
           <svg
             viewBox="0 0 24 24"
@@ -77,7 +110,7 @@ import { toast } from "react-toastify"
           </svg>
           </span>
           </label>
-          <input
+          {/* <input
             type="file"
             id="imageUpload"
             accept="image/*"
@@ -89,7 +122,8 @@ import { toast } from "react-toastify"
               }
             }}
             
-          />         
+          />          */}
+        <input {...getInputProps()}  className='hidden' id='imageUpload'/>
         <span className="flex items-center hover:bg-blck hover:bg-black hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-black cursor-pointer">
           <VideoCameraIcon
             width="24"

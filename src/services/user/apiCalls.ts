@@ -4,7 +4,6 @@ import instance from "./axiosInstance";
 
 export default {
 
-  //user api
 
   Register: async (payload: object) => {
     const response = await instance.post("user/register", payload);
@@ -45,12 +44,34 @@ GetUserPosts: async (id:string|undefined) => {
   return response.data;
 },
 
-
-//admin api
-
-AdminLogin: async (payload: object) => {
-  const response = await instance.post("admin/login", payload);
-  return response.data;
+SearchUser:async(payload:object)=>{
+  const response =await instance.post("user/searchUser",payload)
+  return response.data
 },
+
+DeletePost:async(payaload:object)=>{
+  const response=await instance.post("post/delete",payaload)
+  return response.data
+},
+
+SavePost:async(payaload:object)=>{
+  const response=await instance.post("post/save",payaload)
+  return response.data
+},
+
+GetSavedPost:async()=>{
+  const response=await instance.get("post/saved/all")
+  return response.data
+},
+
+EditUser:async(payload:object)=>{
+  const {data} =await instance.post("user/editProfile",payload)
+  return data
+},
+
+ReportPost:async(payload:object)=>{
+  const {data}=await instance.post("post/report",payload)
+  return data
+}
 
 };

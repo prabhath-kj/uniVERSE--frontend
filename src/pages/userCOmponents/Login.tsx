@@ -2,13 +2,14 @@
 import {Formik,Field,ErrorMessage ,Form} from "formik"
 import * as Yup from "yup"
 import {Link} from "react-router-dom"
-import ApiCalls from "../../services/ApiCalls"
+import ApiCalls from "../../services/user/apiCalls"
 import { toast } from "react-toastify"
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
 import {useDispatch,useSelector} from "react-redux"
-import { setLogin,AuthState } from "../../state"
+import { setLogin } from "../../state/user"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { RootState } from "../../state/rooState";
 
 
 interface LoginFormValues{
@@ -29,7 +30,9 @@ const Login = () => {
 
     const dispatch=useDispatch()
     const Navigate=useNavigate()
-    const isAuth =Boolean(useSelector((state:AuthState)=>state.token))
+    const isAuth =Boolean(useSelector((state:RootState)=>state?.user?.token))
+    console.log(isAuth);
+    
 
     const initialValues:LoginFormValues={
         email:"",
@@ -64,7 +67,7 @@ const Login = () => {
     }
   return (
     <div>
-    <section className="min-h-screen flex items-stretch text-white ">
+    <section className="min-h-screen flex items-stretch text-white bg-slate-50 ">
         <div className="lg:w-1/2 w-full flex items-center justify-center text-center md:px-16 px-0 z-0">
             
             <div className="absolute lg:hidden z-10 inset-0 bg-gray-500 bg-no-repeat bg-cover items-center" >
@@ -121,7 +124,7 @@ const Login = () => {
                     <div className=" pt-4">
                     <Field type="password" autoComplete="off" name="password" placeholder="Password" className="block w-full p-2 text-base rounded-sm bg-black" />
                      <ErrorMessage name="password" component="div" className="text-red-500" />
-                     <p className="text-end text-black">Recover password</p>
+                    <Link to="/recover"><p className="text-end text-black">Recover password</p></Link> 
                     </div>
  
                     

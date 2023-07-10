@@ -1,13 +1,13 @@
 import { Formik, Field, Form, ErrorMessage} from "formik";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import ApiCalls from "../../services/ApiCalls";
-import { setAdLogin ,AuthState} from "../../state";
+import ApiCalls from "../../services/admin/apiCalls";
+import { setAdLogin } from "../../state/admin";
 import { useDispatch } from "react-redux";
 import {useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import { RootState } from "../../state/rooState";
 
 
 
@@ -19,7 +19,7 @@ interface LoginFormValues{
 
 const AdLogin = () => {
   const Navigate=useNavigate()
-  const isAuth =Boolean(useSelector((state:AuthState)=>state.adminToken))
+  const isAuth =Boolean(useSelector((state:RootState)=>state.admin.adminToken))
 
 useEffect(()=>{
    isAuth?Navigate("/admin"):Navigate('/admin/login')
@@ -60,7 +60,7 @@ useEffect(()=>{
 }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-black to-gray-50">
       <div className="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-3xl w-50 max-w-md">
         <div className="font-medium self-center text-xl sm:text-3xl text-gray-800">
           Admin Login

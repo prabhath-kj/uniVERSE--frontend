@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface User {
-    _id?:string
+    _id:string
     googleId?: string;
     username: string;
     email: string;
@@ -24,11 +24,13 @@ export interface Post {
     _id:string
   userId: string;
   username: string;
-  description?: string;
-  picturePath?: string;
-  userPicturePath?: string;
-  likes: Map<string, boolean>;
+  description: string;
+  picturePath:string[];
+  userPicturePath: string;
+  likes: { [userId: string]: boolean};
   comments: string[];
+  createdAt:string;
+  savedBy:string[];
  
 }
 
@@ -36,23 +38,19 @@ export interface Post {
 export interface AuthState {
   user: User | null;
   token: string | null;
-  admin:User|null;
-  adminToken:string|null
   posts: Post[];
-  isToggle:Boolean
+  isToggle:Boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   token: null,
-  admin:null,
-  adminToken:null,
   posts: [],
-  isToggle:true
+  isToggle:true,
 };
 
-const authSlice = createSlice({
-   name: "auth",
+const userSlice = createSlice({
+   name: "user",
    initialState,
 
   reducers: {
@@ -60,11 +58,6 @@ const authSlice = createSlice({
     state.user = action.payload.user;
     state.token = action.payload.token;
     },
-
-    setAdLogin:(state,action)=>{
-    state.admin=action.payload.admin,
-    state.adminToken=action.payload.adminToken
-     },
 
     setPosts: (state, action) => {
     state.posts = action.payload.posts;
@@ -82,11 +75,11 @@ const authSlice = createSlice({
 
     setSideBar:(state)=>{
     state.isToggle=!state.isToggle
-    }
-
+    },
+    
   },
 });
 
 
-export const { setLogin, setPosts, setPost,setSideBar,setAdLogin} = authSlice.actions;
-export default authSlice.reducer;
+export const { setLogin, setPosts, setPost,setSideBar} = userSlice.actions;
+export default userSlice.reducer;

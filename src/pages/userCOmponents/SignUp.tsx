@@ -1,16 +1,15 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import ApiCalls from '../../services/ApiCalls';
+import ApiCalls from '../../services/user/apiCalls';
 import {Link,useNavigate} from "react-router-dom"
 import {toast} from "react-toastify"
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
 import jwtDecode from 'jwt-decode';
 import { useState,useEffect} from 'react';
 import {useSelector} from "react-redux"
+import { RootState } from "../../state/rooState";
 
-interface RooState{
-  token:string
-}
+
 
 interface SignUpFormValues {
   username: string;
@@ -47,7 +46,7 @@ const validationSchema = Yup.object({
 
 const SignUp = () => {
   const Navigate=useNavigate()
-  const isAuth =Boolean(useSelector((state:RooState)=>state.token))
+  const isAuth =Boolean(useSelector((state:RootState)=>state.user.token))
 
   useEffect(()=>{
     if(isAuth){
@@ -122,7 +121,7 @@ const SignUp = () => {
 
   return (
     <div>
-      <section className="min-h-screen flex items-stretch text-white">
+      <section className="min-h-screen flex items-stretch text-white bg-slate-50">
       <div className="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center" >
             <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
             <div className="w-full px-24 z-10">

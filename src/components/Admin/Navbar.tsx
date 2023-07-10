@@ -1,42 +1,67 @@
-import { setAdLogin,AuthState } from "../../state"
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { useSelector } from "react-redux"
-import { useEffect } from "react"
+import { setAdLogin, setUsers } from "../../state/admin";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { UserCircleIcon,ChatBubbleBottomCenterIcon ,ArrowLeftIcon,HomeIcon,FlagIcon } from "@heroicons/react/24/solid";
 
-
- const Navbar = () => {
-  const Navigate=useNavigate()
-  const isAuth =Boolean(useSelector((state:AuthState)=>state.adminToken))
-
- useEffect(()=>{
-  if(!isAuth){
-    Navigate('/admin/login')
-  }
- },[isAuth])  
-
-  const dispatch =useDispatch()
- 
-  const handleLogout=()=>{
-    dispatch(setAdLogin({
-        admin:null,
-        token:null
-      }))
-      localStorage.removeItem("adminAuth")
-     }
+const Navbar = () => {
   
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(setUsers([]))
+    dispatch(
+      setAdLogin({
+        admin: null,
+        token: null,
+      })
+    );
+    localStorage.removeItem("adminAuth");
+  };
+
   return (
     <div>
-        <div className="flex items-center justify-end bg-black h-14">
-          <button
-            className="text-gray-50 transition-all duration-300 hover:scale-110 hover:text-red-600 mr-10 "
-           onClick={handleLogout}
-           >
-            Logout
-          </button>
+      <div className="bg-black h-screen space-y-10">
+      <div className="px-4 py-4 uppercase font-extrabold">Admin panel</div>
+        <div className="w-full flex items-center gap-x-1.5 group select-none">
+          
+          <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm cursor-pointer">
+            <HomeIcon className="w-6 h-6" />
+            <Link to="/admin">Dash board</Link>
+          </div>
         </div>
-    </div>
-  )
-}
 
-export default Navbar
+        <div className="w-full flex items-center gap-x-1.5 group select-none">
+          <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
+            <UserCircleIcon className="w-6 h-6" />
+            <Link to="users">User</Link>
+          </div>
+        </div>
+
+        <div className="w-full flex items-center gap-x-1.5 group select-none">
+          <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
+            <ChatBubbleBottomCenterIcon className="w-6 h-6" />
+            <Link to="posts">Post</Link>
+          </div>
+        </div>
+        <div className="w-full flex items-center gap-x-1.5 group select-none">
+          <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
+            <FlagIcon className="w-6 h-6" />
+            <Link to="reports">Reports</Link>
+          </div>
+        </div>
+        <div className="w-full pr-3 flex flex-col space-y-10">
+          <div className="pl-4 text-lg uppercase ">Settings</div>
+          <div className="w-full flex items-center gap-x-1.5 group select-none">
+            <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm cursor-pointer">
+              <ArrowLeftIcon className="w-6 h-6" />
+              <span onClick={handleLogout}>Log out</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;
