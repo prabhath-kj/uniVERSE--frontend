@@ -1,71 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { User } from "../../state/user";
 import apiCalls from "../../services/admin/apiCalls";
 import { setUsers } from "../../state/admin";
 
-interface Props {
-  users: User[];
-}
-
-const UserTable: React.FC<Props> = ({ users }) => {
+const UserTable: React.FC = () => {
   const [search, setSearch] = useState("");
-  const [filteredData, setFilteredData] = useState<User[]>(users);
+  const [users, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const getUsers = async () => {
+    try {
+      const { data } = await apiCalls.GetAllUsers();
+      setUser(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleSearch = (value: string) => {
     setSearch(value);
-    const searchData = users.filter(
-      (user) =>
-        user.username.includes(value.toLowerCase()) || user.email.includes(value.toLowerCase())
-    );
-    setFilteredData(searchData);
   };
 
   const handleUser = async (
-    userId: string|undefined,
-    username: string,
+    userId: string | undefined,
     value: boolean | undefined,
-    action: string
   ) => {
     const payload = {
       id: userId,
       status: !value,
     };
 
-    // toast(`Are you sure you want to ${action} ${username}?`, {
-    //   position: "top-center",
-    //   hideProgressBar: true,
-    //   closeOnClick: true,
-    //   theme: "light",
-    // });
-
     try {
       const { data, message } = await apiCalls.EditUser(payload);
 
       if (data) {
-        const updatedUsers = users.map((user) =>
+        const updatedUsers:User[] = users?.map((user) =>
           user._id === data._id ? data : user
         );
-        setFilteredData(updatedUsers);
+        setUser(updatedUsers);
         dispatch(setUsers(updatedUsers));
       }
 
       if (message) {
-        setTimeout(()=>{
+        setTimeout(() => {
           toast(message, {
             position: "top-center",
             hideProgressBar: true,
             closeOnClick: true,
             theme: "light",
           });
-        },1000)
+        }, 1000);
       }
     } catch (err) {
       console.log(err);
     }
   };
+
+  const filteredData = users.filter(
+    (user) =>
+      user.username.includes(search.toLowerCase()) ||
+      user.email.includes(search.toLowerCase())
+  );
 
   return (
     <div className="overflow-x-auto">
@@ -121,10 +122,9 @@ const UserTable: React.FC<Props> = ({ users }) => {
                   } btn-xs`}
                   onClick={() =>
                     handleUser(
-                      user._id,
-                      user.username,
-                      user.blocked,
-                      user.blocked ? "Unblock" : "Block"
+                      user?._id,
+                      user?.blocked,
+                    
                     )
                   }
                 >

@@ -1,19 +1,25 @@
 import {UserCircleIcon,ChatBubbleOvalLeftEllipsisIcon,ArrowLeftOnRectangleIcon,BookmarkIcon} from "@heroicons/react/24/solid"
-import   { setLogin, setPosts } from "../state/user"
+import   { setLogin, setPosts } from "../../state/user"
 import { useSelector,useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { RootState } from "../state/rooState";
+import { Link,useLocation } from "react-router-dom";
+import UserAvatar from "./UserAvatar";
+import { RootState } from "../../state/rooState";
 type Toggle={
     isOpen:Boolean
   }
 
  const SideBar = ({isOpen}:Toggle) => {
-
     const dispatch=useDispatch()
-  
+    const location = useLocation();
+    
     const user =useSelector((state:RootState)=>state.user.user)
    
- 
+    const isActive = (path: string) => {
+        console.log("hiii");
+        
+        return  location.pathname.includes(path);
+      };
+      
     const handleLogout=()=>{
     dispatch(setLogin({
         user:null,
@@ -30,26 +36,21 @@ if(!isOpen)return null
 return (
 
 <aside className="w-44 bg-slate-50 shadow-xl h-88 flex flex-col items-center pt-5 pb-2 space-y-7 mx-4 my-4 rounded-md  ">
+<UserAvatar profilePic={user?.profilePic} username={undefined} width={12} hight={12} />
+<p className="mt-2 text-lg font-semibold">{user?.username}</p>
 
 <div className="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-md">
-<div className="flex items-center justify-center mx-5 my-5">
-  <div className="text-center">
-    <img src={user?.profilePic} alt="user image" className="w-16 h-16 rounded-full mx-auto" />
-    <p className="mt-2 text-lg font-semibold">{user?.username}</p>
-  </div>
-</div>
-
     <div className=" pl-4 text-black text-xs text-[14px] uppercase">Explore Panel</div>
 
     <div className="w-full flex items-center gap-x-1.5 group select-none">
         <div className="w-1 rounded-xl h-8 bg-transparent transition-colors duration-200 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-[102%] group-hover:translate-y-0 translate-y-0 bg-red-600 transition-all duration-300"></div>
+            <div className={`absolute top-0 left-0 w-full h-[102%] group-hover:translate-y-0 translate-y-0 ${isActive(`/profile/${user?.username}`)?" bg-red-600":""} transition-all duration-300`}></div>
         </div>
         <div className="  group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm cursor-pointer" >                    
             
           <UserCircleIcon className="w-6 h-6"/>
 
-          <Link to="/profile" className="">Profile</Link>
+          <Link to={`/profile/${user?.username}`} className="">Profile</Link>
         </div>
     </div>
 
@@ -97,7 +98,7 @@ return (
 
     <div className="w-full flex items-center gap-x-1.5 group select-none">
         <div className="w-1 rounded-xl h-8 bg-transparent transition-colors duration-200 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-[102%] translate-y-full group-hover:translate-y-0 bg-red-600 transition-all duration-300"></div>
+            <div className={`absolute top-0 left-0 w-full h-[102%] group-hover:translate-y-0 translate-y-0 ${isActive(`/saved`)?" bg-red-600":""} transition-all duration-300`}></div>
         </div>
         <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm" >
             {/* <svg className="h-5 w-5 group-hover:fill-red-600 dark:fill-gray-600  transition-colors duration-200" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -106,7 +107,6 @@ return (
             <span className="">Settings</span> */}
             <BookmarkIcon className="w-6 h-6"/>
             <Link to="saved">Saved post</Link>
-
         </div>
     </div>
 

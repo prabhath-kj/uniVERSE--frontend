@@ -27,5 +27,10 @@ GetReportedPost:async()=>{
   const {data}= await instance.get("post/report/all")
   return data
 }
+,
+GetPosts:async()=>{
+  const {data}= await instance.get("admin/posts")
+  return data
+}
 
 };

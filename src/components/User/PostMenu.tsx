@@ -1,10 +1,10 @@
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import apiCalls from '../services/user/apiCalls';
-import { setPosts } from '../state/user';
+import apiCalls from '../../services/user/apiCalls';
+import { setPosts } from '../../state/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../state/rooState';
+import { RootState } from '../../state/rooState';
 import Swal from 'sweetalert2';
 
 type Props = {
@@ -12,9 +12,10 @@ type Props = {
   savedBy: string[];
   postedUser: string;
   currentUser: string | null;
+  isDeleted:boolean;
 };
 
-const PostMenu = ({ postId, savedBy, postedUser, currentUser }: Props) => {
+const PostMenu = ({ postId, savedBy, postedUser, currentUser ,isDeleted}: Props) => {
   const status =savedBy.includes(currentUser ?? '')
   
   const [isCurrentUserPostOwner] = useState(postedUser === currentUser);
@@ -28,7 +29,7 @@ const PostMenu = ({ postId, savedBy, postedUser, currentUser }: Props) => {
     
     if (isCurrentUserPostOwner) {
       try {
-        const { message, success } = await apiCalls.DeletePost({ id: postId });
+        const { message, success } = await apiCalls.DeletePost({ id: postId ,set:!isDeleted});
 
         if (success) {
           const updatedPost = posts.filter((post) => post._id !== postId);

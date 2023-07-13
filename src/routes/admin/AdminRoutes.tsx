@@ -11,7 +11,7 @@ export const AdminRoutes =
     element: <AuthProvider><App/></AuthProvider>,
     children:[
       {
-        path:"/admin",
+        path:"dashboard",
         element:<Dashboard/>
       },
       {

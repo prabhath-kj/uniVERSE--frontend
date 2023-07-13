@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import Login from "../../pages/userComponents/Login";
+import Login from "../../pages/user/Login";
 import {ReactNode} from "react"
 import { RootState } from "../../state/rooState";
 

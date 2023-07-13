@@ -72,6 +72,21 @@ EditUser:async(payload:object)=>{
 ReportPost:async(payload:object)=>{
   const {data}=await instance.post("post/report",payload)
   return data
+},
+
+FollowUser:async(payload:object)=>{
+  const {data}= await instance.post("user/follow",payload)
+  return data
+},
+
+UnFollowUser:async(payload:object)=>{
+  const {data}= await instance.post("user/unFollow",payload)
+  return data
+},
+
+GetUser:async(payload:string|undefined)=>{
+  const {data}=await instance.get(`user/${payload}`)
+  return data
 }
 
 };

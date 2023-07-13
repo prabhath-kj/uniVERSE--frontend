@@ -1,15 +1,15 @@
 import App from "../../App";
-import SignUp from "../../pages/userComponents/SignUp";
-import Login from "../../pages/userComponents/Login";
-import Post from "../../pages/userComponents/Posts";
-import EmailVerify from "../../pages/userComponents/EmailVerify";
-import Search from "../../pages/userComponents/Search";
-import SavedPosts from "../../pages/userComponents/SavedPosts";
-import Profile from "../../components/Profile";
+import SignUp from "../../pages/user/SignUp";
+import Login from "../../pages/user/Login";
+import Post from "../../pages/user/Posts";
+import EmailVerify from "../../pages/user/EmailVerify";
+import Search from "../../pages/user/Search";
+import SavedPosts from "../../pages/user/SavedPosts";
+import Profile from "../../components/User/Profile";
 import AuthProvider from "./AuthProvider";
-import EditProfile from "../../pages/userComponents/EditProfile";
+import EditProfile from "../../pages/user/EditProfile";
 import ErrorElement from "../../pages/ErrorElement";
-import  ForgotPassword  from "../../pages/userComponents/ForgotPassword";
+import  ForgotPassword  from "../../pages/user/ForgotPassword";
 
 
  export const userRoutes =
@@ -25,7 +25,7 @@ import  ForgotPassword  from "../../pages/userComponents/ForgotPassword";
         element:<Post/>,
       },
       {
-        path:"profile",
+        path:"profile/:username",
         element:<Profile/>,
       },
       {
@@ -41,7 +41,8 @@ import  ForgotPassword  from "../../pages/userComponents/ForgotPassword";
       {
         path:"profile/edit",
         element:<EditProfile/>
-      }
+      },
+  
     ],
   }
 

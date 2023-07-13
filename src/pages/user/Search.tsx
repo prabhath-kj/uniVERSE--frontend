@@ -1,7 +1,9 @@
 import { useLocation } from "react-router-dom";
-import SearchUser from "../../components/SearchUser";
+import SearchUser from "../../components/User/SearchUser";
 import { useEffect, useState } from "react";
 import ApiCalls from "../../services/user/apiCalls";
+
+
 
 const Search = () => {
   const [queryValue, setQueryValue] = useState<any>();

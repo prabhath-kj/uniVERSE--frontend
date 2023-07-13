@@ -1,62 +1,60 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Post, setPosts } from "../../state/user";
 import apiCalls from "../../services/admin/apiCalls";
+import { Post } from "../../state/user";
 
-interface Props {
-  posts: Post[];
-}
-
-const PostTable: React.FC<Props> = ({ posts }) => {
+const PostTable: React.FC = () => {
   const [search, setSearch] = useState("");
-  const [filteredData, setFilteredData] = useState<Post[]>(posts);
-  console.log(filteredData);
-  
-  const dispatch = useDispatch();
+  const [posts, setPosts] = useState<Post[]>([]);
 
-  const handleSearch = (value: string) => {
-    setSearch(value);
-    const searchData = posts.filter(
-      (post) =>
-        post?.description?.includes(value.toLowerCase()) || post.username.includes(value.toLowerCase())
-    );
-    setFilteredData(searchData);
-  };
 
-  const handleDelete = async (postId: string) => {
-    // toast(`Are you sure you want to delete?`, {
-    //   position: "top-center",
-    //   hideProgressBar: true,
-    //   closeOnClick: true,
-    //   theme: "light",
-    // });
+  useEffect(() => {
+    getFeeds();
+  }, []);
 
+  const getFeeds = async () => {
     try {
-     const {message,success}= await apiCalls.DeletePost({id:postId});
-     
-     if(success){
-        const updatedPost= posts.filter((post)=>{
-          return  post._id!=postId
-        })
-        console.log("iam updated",updatedPost);
-        
-        setFilteredData(updatedPost)
-
-        dispatch(setPosts({
-            posts:updatedPost
-        }))
-       toast(message, {
-        position: "top-center",
-        hideProgressBar: true,
-        closeOnClick: true,
-        theme: "light",
-       })
-    }
+      const { post } = await apiCalls.GetPosts();
+      setPosts(post);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+  };
+
+  const handleDelete = async (postId: string, isDeleted: boolean) => {
+    try {
+      const { message, success } = await apiCalls.DeletePost({ id: postId, set: !isDeleted });
+
+      if (success) {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post._id === postId) {
+              return { ...post, isDeleted: !isDeleted };
+            }
+            return post;
+          })
+        );
+
+        toast(message, {
+          position: "top-center",
+          hideProgressBar: true,
+          closeOnClick: true,
+          theme: "light",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const filteredData = posts.filter(
+    (post) =>
+      post.description.includes(search.toLowerCase()) || post.username.includes(search.toLowerCase())
+  );
 
   return (
     <div className="overflow-x-auto">
@@ -80,29 +78,23 @@ const PostTable: React.FC<Props> = ({ posts }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((post: Post) => (
-            <tr key={post?._id}>
+          {filteredData.map((post) => (
+            <tr key={post._id}>
               <td>
-              {post?.picturePath.length==0 ?(
-             <p>No Image</p>
-              ): (
-                <img
-                src={post?.picturePath[0]}
-                alt="Post Image"
-                 className="w-12 h-12"
-                 />
-                ) }
-
+                {post.picturePath.length === 0 ? (
+                  <p>No Image</p>
+                ) : (
+                  <img src={post?.picturePath[0]} alt="Post Image" className="w-12 h-12" />
+                )}
               </td>
-              <td>{post?.username}</td>
-              {/* <td>{post?.createdAt}</td> */}
-              <td>{post?.description?.slice(0,50)}</td>
+              <td>{post.username}</td>
+              <td>{post.description.slice(0, 50)}</td>
               <td>
                 <button
-                  className="btn btn-error btn-xs"
-                  onClick={() => handleDelete(post?._id)}
+                  className={`btn ${post.isDeleted ? "btn-info" : "btn-error"} btn-xs`}
+                  onClick={() => handleDelete(post._id, post.isDeleted)}
                 >
-                  Delete
+                  {post.isDeleted ? "UN BLOCK" : "BLOCK"}
                 </button>
               </td>
             </tr>

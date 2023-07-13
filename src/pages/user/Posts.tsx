@@ -1,11 +1,11 @@
 import  { useEffect,useState } from "react";
-import PostComponent from "../../components/MyPost";
-import Posted from "../../components/Posted";
+import PostComponent from "../../components/User/MyPost";
+import Posted from "../../components/User/Posted";
 import ApiCalls from "../../services/user/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../../state/user";
 import { RootState } from "../../state/rooState";
-import Loading from "../../components/Loading";
+import Loading from "../../components/User/Loading";
 
 const Post = () => {
 

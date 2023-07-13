@@ -1,9 +1,10 @@
-import NavBar from './components/NavBar';
-import SideBar from './components/SideBar';
-import Add from './components/Add';
+import NavBar from './components/User/NavBar';
+import SideBar from './components/User/SideBar';
+import Add from './components/User/Add';
 import { Outlet } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { RootState } from './state/rooState';
+import FollowSuggestions from './components/User/FollowSuggesions';
 
 const App = () => {
 
@@ -22,8 +23,9 @@ console.log(isToggler);
         <div className="w-full sm:w-4/5 py-5 px-10  overflow-y-auto mt-12 scrollbar-hide">
           <Outlet />
         </div>
-        <div className="col-span-3 mt-20 hidden sm:block ">
+        <div className="mt-20  hidden sm:block ">
           <Add />
+          {/* <FollowSuggestions/> */}
         </div>
       </div>
     </div>

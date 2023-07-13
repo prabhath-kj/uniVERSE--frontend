@@ -1,31 +1,12 @@
-import {useSelector,useDispatch} from "react-redux"
-import { RootState } from "../../state/rooState";
-import { useEffect } from "react";
+import React from "react";
 import ReportTable from "../../components/Admin/ReportsTable";
-import apiCalls from "../../services/admin/apiCalls";
-import { setReport } from "../../state/admin";
 
-
-const Reports = () => {
-const dispatch =useDispatch()
-const reports=useSelector((state:RootState)=>state.admin.reports)
-
-  useEffect(()=>{  
-    getReports()
-  
-  },[])
-  
-  const getReports = async () => {
-    const { report } = await apiCalls.GetReportedPost();    
-    dispatch(setReport(report));
-  };
-
+const Reports: React.FC = () => {
   return (
-    <div >
-    <ReportTable reports={reports} />
+    <div>
+      <ReportTable />
     </div>
+  );
+};
 
-  )
-}
-
-export default Reports
+export default Reports;

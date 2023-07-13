@@ -1,29 +1,32 @@
-import React, { useState } from "react";
-// import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import apiCalls from "../../services/admin/apiCalls";
 import { Report } from "../../state/admin";
 
-interface Props {
-  reports: Report[];
-}
-
-const ReportTable: React.FC<Props> = ({ reports }) => {
+const ReportTable: React.FC = () => {
   const [search, setSearch] = useState("");
-  const [filteredData, setFilteredData] = useState<Report[]>(reports);
-//   const dispatch = useDispatch();
+  const [reports, setReports] = useState<Report[]>([]);
+
+  useEffect(() => {
+    getReports();
+  }, []);
+
+  const getReports = async () => {
+    try {
+      const { report } = await apiCalls.GetReportedPost();
+      console.log(report);
+      
+      setReports(report);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleSearch = (value: string) => {
     setSearch(value);
-    const searchData = reports.filter(
-      (report) =>
-        report?.reason?.includes(value.toLowerCase()) ||
-        report?.postId?.description?.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredData(searchData);
   };
 
-  const handleDelete = async (reportId: string) => {
+  const handleDelete = async (reportId: string,isDeleted: boolean) => {
     toast(`Are you sure you want to delete?`, {
       position: "top-center",
       hideProgressBar: true,
@@ -32,18 +35,25 @@ const ReportTable: React.FC<Props> = ({ reports }) => {
     });
 
     try {
-      const { message, success } = await apiCalls.DeletePost({ id: reportId });
+      const { message, success } = await apiCalls.DeletePost({ id: reportId , set: !isDeleted});
       console.log(message);
 
       if (success) {
-        const updatedReports = reports.filter((report) => report._id !== reportId);
-        setFilteredData(updatedReports);
-
-        // If you want to dispatch the updated post data to the store, uncomment the following lines
-        // dispatch(setPost({
-        //     post: updatedPost
-        // }));
-
+        setReports((prevReports) =>
+        prevReports.map((report) => {
+          if (report.postId._id === reportId) {
+            return {
+              ...report,
+              postId: {
+                ...report.postId,
+                isDeleted: !isDeleted
+              }
+            };
+          }
+          return report;
+        })
+      );
+      
         toast(message, {
           position: "top-center",
           hideProgressBar: true,
@@ -55,6 +65,12 @@ const ReportTable: React.FC<Props> = ({ reports }) => {
       console.log(err);
     }
   };
+
+  const filteredData = reports.filter(
+    (report) =>
+      report?.reason?.includes(search.toLowerCase()) ||
+      report?.postId?.description?.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="overflow-x-auto">
@@ -94,11 +110,11 @@ const ReportTable: React.FC<Props> = ({ reports }) => {
               <td>{report?.reason}</td>
               <td>{report?.postId?.description?.slice(0, 50)}</td>
               <td>
-                <button
-                  className="btn btn-error btn-xs"
-                  onClick={() => handleDelete(report?._id)}
+              <button
+                  className={`btn ${report?.postId?.isDeleted ? "btn-info" : "btn-error"} btn-xs`}
+                  onClick={() => handleDelete(report?.postId?._id, report?.postId?.isDeleted)}
                 >
-                  Delete
+                  {report?.postId?.isDeleted ? "UN BLOCK" : "BLOCK"}
                 </button>
               </td>
             </tr>

@@ -31,6 +31,7 @@ export interface Post {
   comments: string[];
   createdAt:string;
   savedBy:string[];
+  isDeleted:boolean;
  
 }
 
@@ -62,7 +63,16 @@ const userSlice = createSlice({
     setPosts: (state, action) => {
     state.posts = action.payload.posts;
     },
-
+    setFollowers: (state, action) => {
+      if (state.user) {
+        state.user.followers = action.payload;
+      }
+    },
+    setFollowing: (state, action) => {
+      if (state.user) {
+        state.user.following = action.payload;
+      }
+    },
     setPost: (state, action) => {
     const newPosts = state.posts.map((post) => {
     if (post._id === action.payload.post._id) {
@@ -81,5 +91,5 @@ const userSlice = createSlice({
 });
 
 
-export const { setLogin, setPosts, setPost,setSideBar} = userSlice.actions;
+export const { setLogin, setPosts, setPost,setSideBar,setFollowers,setFollowing} = userSlice.actions;
 export default userSlice.reducer;

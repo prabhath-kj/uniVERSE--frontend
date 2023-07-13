@@ -1,5 +1,5 @@
 import { Bars3Icon,BellAlertIcon,MoonIcon,MagnifyingGlassCircleIcon} from '@heroicons/react/24/solid'
-import  {setSideBar } from "../state/user"
+import  {setSideBar } from "../../state/user"
 import { useDispatch } from "react-redux"
 import { Link,useNavigate } from "react-router-dom"
 import { useEffect, useState,useRef ,RefObject} from 'react'
@@ -31,7 +31,7 @@ import { useEffect, useState,useRef ,RefObject} from 'react'
       
       const timer = setTimeout(() => {
         getSuggestion();
-      }, 200);
+      }, 500);
   
       return () => {
         clearTimeout(timer);
