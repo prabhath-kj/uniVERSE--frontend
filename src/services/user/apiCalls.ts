@@ -87,6 +87,26 @@ UnFollowUser:async(payload:object)=>{
 GetUser:async(payload:string|undefined)=>{
   const {data}=await instance.get(`user/${payload}`)
   return data
+},
+
+GetNotifications:async()=>{
+  const {data}=await instance.get('/notification')
+  return data
+},
+
+PostComment:async(payload:object)=>{
+  const {data}= await instance.post("/comments",payload)
+  return data
+},
+
+GetComment:async(payload:string)=>{
+  const {data}= await instance.get(`/comments/${payload}`)
+  return data
+},
+
+DeleteComment:async(payload:object)=>{
+  const {data}= await instance.post(`comments/delete`,payload)
+  return data
 }
 
 };

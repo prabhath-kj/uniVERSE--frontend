@@ -6,7 +6,7 @@ export const Comment = () => {
 
   return (
     <div>
-        <ChatBubbleOvalLeftEllipsisIcon className='w-6 h-6'/>
+        <ChatBubbleOvalLeftEllipsisIcon className='w-6 h-6 cursor-pointer'/>
     </div>
   );
 };

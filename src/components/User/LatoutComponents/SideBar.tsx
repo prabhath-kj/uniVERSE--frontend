@@ -1,9 +1,9 @@
 import {UserCircleIcon,ChatBubbleOvalLeftEllipsisIcon,ArrowLeftOnRectangleIcon,BookmarkIcon} from "@heroicons/react/24/solid"
-import   { setLogin, setPosts } from "../../state/user"
+import   { setLogout } from "../../../state/user"
 import { useSelector,useDispatch } from "react-redux";
 import { Link,useLocation } from "react-router-dom";
-import UserAvatar from "./UserAvatar";
-import { RootState } from "../../state/rooState";
+import UserAvatar from "../ProfileComponent/UserAvatar";
+import { RootState } from "../../../state/rooState";
 type Toggle={
     isOpen:Boolean
   }
@@ -15,19 +15,12 @@ type Toggle={
     const user =useSelector((state:RootState)=>state.user.user)
    
     const isActive = (path: string) => {
-        console.log("hiii");
         
         return  location.pathname.includes(path);
       };
       
     const handleLogout=()=>{
-    dispatch(setLogin({
-        user:null,
-        token:null
-      }))
-    dispatch(setPosts({
-        posts:[]
-    }))  
+      dispatch(setLogout())
       localStorage.removeItem("userAuth")
      }
 
@@ -36,7 +29,7 @@ if(!isOpen)return null
 return (
 
 <aside className="w-44 bg-slate-50 shadow-xl h-88 flex flex-col items-center pt-5 pb-2 space-y-7 mx-4 my-4 rounded-md  ">
-<UserAvatar profilePic={user?.profilePic} username={undefined} width={12} hight={12} />
+<UserAvatar profilePic={user?.profilePic} username={undefined} isOnline={true} width={12} hight={12}  />
 <p className="mt-2 text-lg font-semibold">{user?.username}</p>
 
 <div className="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-md">
@@ -92,7 +85,7 @@ return (
                 <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
                 <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
             </svg>
-            <span className="">edit profile</span>
+            <span className="">Edit profile</span>
         </div>
     </div>
 
@@ -116,7 +109,7 @@ return (
         </div>
         <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm cursor-pointer" >
             <ArrowLeftOnRectangleIcon className="w-6 h-6"/>
-            <span onClick={handleLogout}>log out</span>
+            <span onClick={handleLogout}>Log out</span>
         </div>
     </div>
 </div>

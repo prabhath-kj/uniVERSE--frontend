@@ -1,8 +1,8 @@
 import { UserPlusIcon, UserMinusIcon } from "@heroicons/react/24/solid";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../state/rooState";
-import apiCalls from "../../services/user/apiCalls";
-import { setFollowing } from "../../state/user";
+import { RootState } from "../../../state/rooState";
+import apiCalls from "../../../services/user/apiCalls";
+import { setFollowing } from "../../../state/user";
 import {toast}  from "react-toastify"
 
 const AddFriend = ({ userId }: any) => {

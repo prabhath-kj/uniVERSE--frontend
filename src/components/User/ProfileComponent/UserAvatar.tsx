@@ -5,10 +5,11 @@ interface props{
      hight:number;
      width:number;
      username:string|undefined;
+     isOnline:boolean;
 }
 
 
-const UserAvatar = ({profilePic,username,width,hight}:props) => {
+const UserAvatar = ({profilePic,username,isOnline,width,hight}:props) => {
   const navigate =useNavigate()
 
   const handleUserClick = () => {
@@ -19,7 +20,7 @@ const UserAvatar = ({profilePic,username,width,hight}:props) => {
     <div className="cursor-pointer">
         <div className="relative flex flex-shrink-0 items-end" onClick={()=>{handleUserClick()}}>
             <img className={`h-${hight} w-${width} rounded-full`} src={profilePic} alt="User Avatar" />
-            <span className="absolute h-4 w-4  bg-green-400 rounded-full bottom-0 right-0 border-2 border-slate-900"></span>
+            <span className={` ${isOnline?"absolute h-4 w-4 bg-green-400 rounded-full bottom-0 right-0 border-2 border-slate-900":""}`}></span>
          </div>
     </div>
   )

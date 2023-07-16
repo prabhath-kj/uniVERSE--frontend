@@ -1,15 +1,14 @@
-import NavBar from './components/User/NavBar';
-import SideBar from './components/User/SideBar';
+import NavBar from './components/User/LatoutComponents/NavBar';
+import SideBar from './components/User/LatoutComponents/SideBar';
 import Add from './components/User/Add';
 import { Outlet } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { RootState } from './state/rooState';
-import FollowSuggestions from './components/User/FollowSuggesions';
+import FollowSuggestions from './components/User/PostComponents/FollowSuggesions';
 
 const App = () => {
 
 const isToggler=useSelector((state:RootState)=>state.user.isToggle)
-console.log(isToggler);
 
   return (
     <div className="h-screen w-full flex flex-col justify-between">

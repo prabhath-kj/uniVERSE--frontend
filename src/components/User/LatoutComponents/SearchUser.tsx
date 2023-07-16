@@ -1,6 +1,6 @@
-import { User } from "../../state/user";
-import UserAvatar from "./UserAvatar";
-import AddFriend from "./AddFriend";
+import { User } from "../../../state/user";
+import UserAvatar from "../ProfileComponent/UserAvatar";
+import AddFriend from "../ProfileComponent/AddFriend";
 
 type SearchUser={
     user:User
@@ -14,9 +14,9 @@ const SearchUser = ({user}:SearchUser) => {
         <div className="w-full flex items-center justify-between">
           <span></span>
             <AddFriend userId={user?._id}/>
-        </div>
+           </div>
         <div className="flex items-center  rounded-lg py-1 cursor-pointer" >
-          <UserAvatar profilePic={user?.profilePic} username={user?.username} hight={12} width={12}/>
+          <UserAvatar profilePic={user?.profilePic} username={user?.username} isOnline={true} hight={12} width={12}/>
           <div className="ml-3.5 flex-row space-y-2">
             <div className="font-semibold tracking-tight text-xs text-gray-600">{user?.username}</div>
             <div className="text-xs leading-none opacity-50  text-gray-600">{user?.email}</div>

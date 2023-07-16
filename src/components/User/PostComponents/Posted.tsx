@@ -1,16 +1,23 @@
 import { useSelector } from "react-redux";
-import { Post } from "../../state/user";
-import { RootState } from "../../state/rooState";
+import { Post } from "../../../state/user";
+import { RootState } from "../../../state/rooState";
 import { Likes } from "./Likes";
 import { Comment } from "./Comment";
 import PostMenu from "./PostMenu"
-import UserAvatar from "./UserAvatar";
+import UserAvatar from "../ProfileComponent/UserAvatar";
+import PostComment from "./PostComment";
+import ShowComment from "./ShowComment";
+import { useState } from "react";
+import SharePost from "./SharePost";
 
 interface PostProps {
     post: Post;
   }
   
  const Posted =({post}:PostProps) => {
+  const [newComment,setComment]=useState("")
+  const [noOfComment ,setNoOfComments]= useState(0)  
+
   const formattedDateTime =post?.createdAt
   ? new Date(post.createdAt).toLocaleString('en-IN', {
       timeZone: 'Asia/Kolkata',
@@ -22,12 +29,18 @@ interface PostProps {
     })
   : 'No date available';
  const user =useSelector((state:RootState)=>state.user.user)
-
+   
+ const handleNewComment=(value:any)=>{
+  setComment(value)
+ }
+ const setCommentLength=(value:any)=>{
+  setNoOfComments(value)
+ }
   return (
     <div className="bg-white border-2 h-auto shadow-lg rounded-lg pb-4 mt-2 ">
     <div className="flex flex-row px-2 py-3 justify-between">
   <div className="flex">
-     <UserAvatar profilePic={post?.userPicturePath} username={post.username} hight={12} width={12}/>
+     <UserAvatar profilePic={post?.userPicturePath} username={post.username} isOnline={true} hight={12} width={12}/>
     <div className="flex flex-col mb-2 ml-4 mt-1">
       <div className="flex text-gray-600 text-sm font-medium">
         <span className="flex-1 flex-shrink-0">{post?.username}</span>
@@ -57,22 +70,13 @@ interface PostProps {
     <div className="flex w-full border-t border-gray-100">
   <div className="mt-3 mx-5 w-full flex justify-start text-xs">
     <div className="flex text-gray-700 rounded-md mb-2 mr-4 items-center"><Likes id={post?._id} userId={user?._id ??""} likes={post?.likes}/>: <div className="ml-1 text-gray-400 text-ms">{Object.keys(post?.likes).length}</div></div>
-    <div className="flex text-gray-700 font-normal rounded-md mb-2 items-center"><Comment/>: <div className="ml-1 text-gray-400 text-ms">{post?.comments.length}</div></div>
+    <div className="flex text-gray-700 font-normal rounded-md mb-2 mr-4 items-center"><Comment/>: <div className="ml-1 text-gray-400 text-ms">{noOfComment}</div></div>
+    <div className="flex text-gray-700 font-normal rounded-md mb-2 items-center"><SharePost postId={post?._id} picture={post?.picturePath[0]}/></div>
   </div> 
 </div>
-
-<div className="relative flex items-center self-center w-full max-w-xl p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
-<UserAvatar profilePic={user?.profilePic} username={user?.username} hight={10} width={10}/>
- <input type="search" name="comment" className=" w-full ml-1 py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent rounded-lg shadow-md" placeholder="Post a comment..."/>
-  <span className="absolute inset-y-0 right-0 flex items-center pr-6">
-    <button type="submit" className="p-1 focus:outline-none focus:shadow-none hover:text-blue-500 ">
-      <svg className="w-6 h-6 transition ease-out duration-300 hover:text-blue-500 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-      </svg>
-    </button>
-  </span>
 </div>
-</div>
+  <PostComment profilePic={user?.profilePic} username={user?.username} cb={handleNewComment} postId={post?._id} />
+  <ShowComment postId={post?._id} newComment={newComment} currentUser={user?._id} cb={setCommentLength}/>
 </div>
   )
 }

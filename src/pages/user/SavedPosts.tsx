@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import apiCalls from "../../services/user/apiCalls";
-import Posted from "../../components/User/Posted";
+import Posted from "../../components/User/PostComponents/Posted";
 
 const SavedPosts = () => {
   const [saved, setSavedPost] = useState([]);

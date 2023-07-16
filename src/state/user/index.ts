@@ -28,7 +28,6 @@ export interface Post {
   picturePath:string[];
   userPicturePath: string;
   likes: { [userId: string]: boolean};
-  comments: string[];
   createdAt:string;
   savedBy:string[];
   isDeleted:boolean;
@@ -40,6 +39,7 @@ export interface AuthState {
   user: User | null;
   token: string | null;
   posts: Post[];
+  notifications:[];
   isToggle:Boolean;
 }
 
@@ -48,6 +48,7 @@ const initialState: AuthState = {
   token: null,
   posts: [],
   isToggle:true,
+  notifications:[],
 };
 
 const userSlice = createSlice({
@@ -73,6 +74,9 @@ const userSlice = createSlice({
         state.user.following = action.payload;
       }
     },
+    setNotification:(state,action)=>{
+     state.notifications=action.payload
+    },
     setPost: (state, action) => {
     const newPosts = state.posts.map((post) => {
     if (post._id === action.payload.post._id) {
@@ -86,10 +90,17 @@ const userSlice = createSlice({
     setSideBar:(state)=>{
     state.isToggle=!state.isToggle
     },
+    setLogout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.posts = [];
+      state.isToggle = true;
+      state.notifications = [];
+    },
     
   },
 });
 
 
-export const { setLogin, setPosts, setPost,setSideBar,setFollowers,setFollowing} = userSlice.actions;
+export const { setLogin, setPosts, setPost,setSideBar,setFollowers,setFollowing,setNotification,setLogout} = userSlice.actions;
 export default userSlice.reducer;

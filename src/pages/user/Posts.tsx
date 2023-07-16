@@ -1,6 +1,6 @@
 import  { useEffect,useState } from "react";
-import PostComponent from "../../components/User/MyPost";
-import Posted from "../../components/User/Posted";
+import PostComponent from "../../components/User/PostComponents/MyPost";
+import Posted from "../../components/User/PostComponents/Posted";
 import ApiCalls from "../../services/user/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../../state/user";

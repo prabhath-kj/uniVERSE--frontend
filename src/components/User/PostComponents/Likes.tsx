@@ -1,7 +1,7 @@
 import { HeartIcon } from '@heroicons/react/24/solid';
-import ApiCalls from '../../services/user/apiCalls';
+import ApiCalls from '../../../services/user/apiCalls';
 import { useDispatch } from 'react-redux';
-import { setPost } from '../../state/user';
+import { setPost } from '../../../state/user';
 
 interface RooId{
     id:string

@@ -1,8 +1,8 @@
 import {VideoCameraIcon} from '@heroicons/react/24/solid'
 import  { useState } from 'react';
-import ApiCalls from '../../services/user/apiCalls';
+import ApiCalls from '../../../services/user/apiCalls';
 import { useDispatch } from 'react-redux';
-import { setPosts } from '../../state/user';
+import { setPosts } from '../../../state/user';
 import { toast } from "react-toastify"
 import {useDropzone} from 'react-dropzone';
 import Carousel from './sliderComponent';

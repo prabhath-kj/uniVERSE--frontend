@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import SearchUser from "../../components/User/SearchUser";
+import SearchUser from "../../components/User/LatoutComponents/SearchUser";
 import { useEffect, useState } from "react";
 import ApiCalls from "../../services/user/apiCalls";
 

@@ -1,10 +1,10 @@
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import apiCalls from '../../services/user/apiCalls';
-import { setPosts } from '../../state/user';
+import apiCalls from '../../../services/user/apiCalls';
+import { setPosts } from '../../../state/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../state/rooState';
+import { RootState } from '../../../state/rooState';
 import Swal from 'sweetalert2';
 
 type Props = {

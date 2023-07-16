@@ -1,8 +1,9 @@
-import { Bars3Icon,BellAlertIcon,MoonIcon,MagnifyingGlassCircleIcon} from '@heroicons/react/24/solid'
-import  {setSideBar } from "../../state/user"
+import { Bars3Icon,MagnifyingGlassCircleIcon} from '@heroicons/react/24/solid'
+import  {setSideBar } from "../../../state/user"
 import { useDispatch } from "react-redux"
 import { Link,useNavigate } from "react-router-dom"
 import { useEffect, useState,useRef ,RefObject} from 'react'
+import BellIcon from './BellIcon'
 
 
  const NavBar = () => {
@@ -96,8 +97,8 @@ import { useEffect, useState,useRef ,RefObject} from 'react'
              <div className="w-6 h-6 cursor-pointe  px-1 py-1 rounded-md hover:bg-slate-200 focus:outline-none  ">
                {/* <MoonIcon className="w-4 h-4 "/> */}
               </div>
-               <div className="w-6 h-6cursor-pointer bg-white px-1 py-1 rounded-md hover:bg-slate-200 focus:outline-none ml-6">
-               <BellAlertIcon className="w-4 h-4 cursor-pointer "/>
+               <div className="w-8 h-8 ml-6">
+               <Link to="notification"><BellIcon/></Link>
               </div>            
               </div>
          </div>

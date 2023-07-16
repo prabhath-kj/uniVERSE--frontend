@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { RootState } from "../../state/rooState";
-import { Post, User } from "../../state/user";
+import { RootState } from "../../../state/rooState";
+import { Post, User } from "../../../state/user";
 import { Link, Outlet, useParams } from "react-router-dom";
-import Posted from "./Posted";
+import Posted from "../PostComponents/Posted";
 import AddFriend from "./AddFriend";
-import apiCalls from "../../services/user/apiCalls";
+import apiCalls from "../../../services/user/apiCalls";
 
 const Profile = () => {
   const { username } = useParams();
