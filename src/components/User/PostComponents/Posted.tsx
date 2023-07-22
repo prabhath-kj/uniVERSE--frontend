@@ -6,36 +6,19 @@ import { Comment } from "./Comment";
 import PostMenu from "./PostMenu"
 import UserAvatar from "../ProfileComponent/UserAvatar";
 import PostComment from "./PostComment";
-import ShowComment from "./ShowComment";
-import { useState } from "react";
 import SharePost from "./SharePost";
+import { format } from "timeago.js";
 
 interface PostProps {
     post: Post;
   }
   
  const Posted =({post}:PostProps) => {
-  const [newComment,setComment]=useState("")
-  const [noOfComment ,setNoOfComments]= useState(0)  
 
-  const formattedDateTime =post?.createdAt
-  ? new Date(post.createdAt).toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    })
-  : 'No date available';
  const user =useSelector((state:RootState)=>state.user.user)
+ 
    
- const handleNewComment=(value:any)=>{
-  setComment(value)
- }
- const setCommentLength=(value:any)=>{
-  setNoOfComments(value)
- }
+
   return (
     <div className="bg-white border-2 h-auto shadow-lg rounded-lg pb-4 mt-2 ">
     <div className="flex flex-row px-2 py-3 justify-between">
@@ -47,7 +30,7 @@ interface PostProps {
       </div>
       <div className="flex flex-row-reverse justify-end w-full mt-1">
         <div className="text-gray-400 font-thin text-xs">
-          {formattedDateTime}
+          {format(post?.createdAt)}
         </div>
       </div>
     </div>
@@ -69,14 +52,13 @@ interface PostProps {
     <div className="flex justify-start mb-4 border-t border-gray-100">
     <div className="flex w-full border-t border-gray-100">
   <div className="mt-3 mx-5 w-full flex justify-start text-xs">
-    <div className="flex text-gray-700 rounded-md mb-2 mr-4 items-center"><Likes id={post?._id} userId={user?._id ??""} likes={post?.likes}/>: <div className="ml-1 text-gray-400 text-ms">{Object.keys(post?.likes).length}</div></div>
-    <div className="flex text-gray-700 font-normal rounded-md mb-2 mr-4 items-center"><Comment/>: <div className="ml-1 text-gray-400 text-ms">{noOfComment}</div></div>
+    <div className="flex text-gray-700 rounded-md mb-2 mr-4 items-center"><Likes id={post?._id} userId={user?._id ??""} likes={post?.likes}/><div className="pl-1 text-ms text-blue-500">{Object.keys(post?.likes).length} likes</div></div>
+    <div className="flex text-gray-700 font-normal rounded-md mb-2 mr-4 items-center"><Comment postId={post?._id}/></div>
     <div className="flex text-gray-700 font-normal rounded-md mb-2 items-center"><SharePost postId={post?._id} picture={post?.picturePath[0]}/></div>
   </div> 
 </div>
 </div>
-  <PostComment profilePic={user?.profilePic} username={user?.username} cb={handleNewComment} postId={post?._id} />
-  <ShowComment postId={post?._id} newComment={newComment} currentUser={user?._id??""} cb={setCommentLength}/>
+  <PostComment profilePic={user?.profilePic} userId={user?._id??""} username={user?.username}  postId={post?._id} />
 </div>
   )
 }

@@ -41,6 +41,8 @@ export interface AuthState {
   posts: Post[];
   notifications:[];
   isToggle:Boolean;
+  isVisible:string[];
+  commentLength:{[key: string]: number;};
 }
 
 const initialState: AuthState = {
@@ -48,7 +50,9 @@ const initialState: AuthState = {
   token: null,
   posts: [],
   isToggle:true,
+  isVisible:[],
   notifications:[],
+  commentLength:{},
 };
 
 const userSlice = createSlice({
@@ -96,11 +100,32 @@ const userSlice = createSlice({
       state.posts = [];
       state.isToggle = true;
       state.notifications = [];
+      state.isVisible=[];
+      state.commentLength={};
     },
-    
+    setComment: (state, action) => {
+      const postId = action.payload;
+      const index = state.isVisible.indexOf(postId);
+
+      if (index !== -1) {
+        return {
+          ...state,
+          isVisible: state.isVisible.filter((id) => id !== postId),
+        };
+      } else {
+        return {
+          ...state,
+          isVisible: [...state.isVisible, postId],
+        };
+      }
+    },
+    setCommentLength:(state,action)=>{
+     state.commentLength={...state.commentLength,...action.payload}
+    },
   },
 });
 
 
-export const { setLogin, setPosts, setPost,setSideBar,setFollowers,setFollowing,setNotification,setLogout} = userSlice.actions;
+export const { setLogin, setPosts, setPost,setSideBar,setFollowers,setCommentLength,
+              setFollowing,setNotification,setLogout,setComment} = userSlice.actions;
 export default userSlice.reducer;

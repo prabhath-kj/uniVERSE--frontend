@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import UserAvatar from '../ProfileComponent/UserAvatar';
 import EmojiPicker from 'emoji-picker-react';
 import apiCalls from '../../../services/user/apiCalls';
+import ShowComment from "./ShowComment";
+
 import {toast} from "react-toastify"
 
 interface Props {
   profilePic: string | undefined;
   username: string | undefined;
+  userId:string
   postId:string;
-  cb:(value:any)=>void
+  // cb:(value:any)=>void
 }
 
-const PostComment: React.FC<Props> = ({ profilePic, username,postId ,cb}) => {
+const PostComment: React.FC<Props> = ({ profilePic, userId,username,postId}) => {
+  const [newComment,setComment]=useState(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const initialValues = {
@@ -31,11 +35,11 @@ const PostComment: React.FC<Props> = ({ profilePic, username,postId ,cb}) => {
       const {message}=await apiCalls.PostComment({ postId:postId, comment:values.comment })
       if(message){
         toast(message)
-        cb((pre:any)=>!pre)
-      }
+       }
     }catch(err){
      toast("something went worng")
     }finally{
+      setComment(!newComment)
       resetForm();
     }
   };
@@ -100,7 +104,10 @@ const PostComment: React.FC<Props> = ({ profilePic, username,postId ,cb}) => {
           </span>
         </form>
       </div>
-    </>
+      <div>
+      <ShowComment postId={postId} currentUser={userId} newComment={newComment} />
+      </div>
+       </>
   );
 };
 
