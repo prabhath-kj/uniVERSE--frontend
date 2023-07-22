@@ -10,6 +10,7 @@ interface props{
 
 
 const UserAvatar = ({profilePic,username,isOnline,width,hight}:props) => {
+  
   const navigate =useNavigate()
 
   const handleUserClick = () => {

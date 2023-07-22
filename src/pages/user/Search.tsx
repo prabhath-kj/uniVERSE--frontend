@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SearchUser from "../../components/User/LatoutComponents/SearchUser";
 import { useEffect, useState } from "react";
 import ApiCalls from "../../services/user/apiCalls";
@@ -6,31 +6,19 @@ import ApiCalls from "../../services/user/apiCalls";
 
 
 const Search = () => {
-  const [queryValue, setQueryValue] = useState<any>();
   const [users,setUsers] =useState([])
   const [message,setMessage]=useState()
-  const { search } = useLocation();
+  const { username } = useParams();
 
+ 
   useEffect(() => {
-    const queryParams = new URLSearchParams(search);
-    const query = queryParams.get("q");
-    setQueryValue(query);
-  }, [search]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (queryValue) {
+      if (username) {
         getUser();
       }
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [queryValue]);
+  }, [username]);
 
   const getUser = async () => {
-    const { users, message } = await ApiCalls.SearchUser({query:queryValue});
+    const { users, message } = await ApiCalls.SearchUser({query:username});
     console.log(users,message);
     
     if(message){
@@ -53,11 +41,12 @@ const Search = () => {
   
 
   return (
-    <div>
+    <div className="mt-5 flex flex-wrap">
       {users.map((user,index) => (
         <SearchUser key={index} user={user} />
       ))}
-    </div>
+
+      </div>
   );
   }
 export default Search;

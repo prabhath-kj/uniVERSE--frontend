@@ -76,7 +76,7 @@ interface PostProps {
 </div>
 </div>
   <PostComment profilePic={user?.profilePic} username={user?.username} cb={handleNewComment} postId={post?._id} />
-  <ShowComment postId={post?._id} newComment={newComment} currentUser={user?._id} cb={setCommentLength}/>
+  <ShowComment postId={post?._id} newComment={newComment} currentUser={user?._id??""} cb={setCommentLength}/>
 </div>
   )
 }

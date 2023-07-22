@@ -11,6 +11,7 @@ import EditProfile from "../../pages/user/EditProfile";
 import ErrorElement from "../../pages/ErrorElement";
 import ForgotPassword  from "../../pages/user/ForgotPassword";
 import Notifications from "../../pages/user/Notifications";
+import Chat from "../../pages/user/Chat";
 
 
  export const userRoutes =
@@ -30,7 +31,7 @@ import Notifications from "../../pages/user/Notifications";
         element:<Profile/>,
       },
       {
-        path:"search",
+        path:"search/:username",
         element:<Search/>
 
       },
@@ -46,6 +47,10 @@ import Notifications from "../../pages/user/Notifications";
       {
         path:"notification",
         element:<Notifications/>
+      },
+      {
+       path:"chat",
+       element:<Chat/>
       },
   
     ],

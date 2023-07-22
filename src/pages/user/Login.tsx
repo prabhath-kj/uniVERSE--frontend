@@ -27,11 +27,10 @@ const validationSchema=Yup.object({
 
 
 const Login = () => {
-
+     
     const dispatch=useDispatch()
     const Navigate=useNavigate()
     const isAuth =Boolean(useSelector((state:RootState)=>state?.user?.token))
-    console.log(isAuth);
     
 
     const initialValues:LoginFormValues={
@@ -42,6 +41,7 @@ const Login = () => {
 
     useEffect(()=>{
         isAuth?Navigate("/"):Navigate('/login')
+     
      },[isAuth])  
      
      

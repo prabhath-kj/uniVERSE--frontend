@@ -1,14 +1,17 @@
 import { Bars3Icon,MagnifyingGlassCircleIcon} from '@heroicons/react/24/solid'
-import  {setSideBar } from "../../../state/user"
+import  {User, setSideBar } from "../../../state/user"
 import { useDispatch } from "react-redux"
 import { Link,useNavigate } from "react-router-dom"
 import { useEffect, useState,useRef ,RefObject} from 'react'
 import BellIcon from './BellIcon'
+import apiCalls from '../../../services/user/apiCalls' 
+import UserAvatar from '../ProfileComponent/UserAvatar'
+
 
 
  const NavBar = () => {
    const [searchQuery,setSearchQuery]=useState("")
-   const [suggestions, setSuggestions] = useState([]);
+   const [suggestions, setSuggestions] = useState<User[]>([]);
    const [hideSuggestions,setHideSuggestions]=useState(false)
    const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
    const dispatch=useDispatch()
@@ -42,9 +45,10 @@ import BellIcon from './BellIcon'
     const getSuggestion = async () => {
       try {
 
-        const response = await fetch(`https://suggestqueries.google.com/complete/search?client=firefox&q=${searchQuery}`);
-        const data = await response.json();
-        setSuggestions(data[1])
+        // const response = await fetch(`https://suggestqueries.google.com/complete/search?client=firefox&q=${searchQuery}`);
+        // const data = await response.json();
+        const {users} =await apiCalls.SearchUser({query:searchQuery})        
+        setSuggestions(users)
         setHideSuggestions(true);
       } catch (error) {
         console.error('Error fetching search suggestions:', error);
@@ -55,7 +59,7 @@ import BellIcon from './BellIcon'
       if(!searchQuery){
         return null
       }
-      Navigate(`/search?q=${encodeURIComponent(searchQuery)}`)
+      Navigate(`/search/${searchQuery}`)
       setSearchQuery("")
       return;
     }
@@ -77,11 +81,16 @@ import BellIcon from './BellIcon'
         <button type="button"  className="absolute right-0 top-0 mt-3 mr-2" onClick={navigate}>
         <MagnifyingGlassCircleIcon className="w-6 h-6"/>
         </button>
-        {hideSuggestions && suggestions.length > 0 && (
-          <ul className="ml-32 absolute left-0 right-0 bg-white rounded-b-md mt-1 px-3 py-2 text-gray-700 shadow-lg">
+        {hideSuggestions && suggestions?.length > 0 && (
+          <ul className="ml-32 absolute left-0 right-0 bg-white rounded-b-lg mt-1 px-3 py-2 text-gray-700 shadow-lg">
             {suggestions.map((suggestion, index) => (
-              <li key={index} className="cursor-pointer py-1 hover:bg-gray-200">
-                <Link to={`/search?q=${encodeURIComponent(suggestion)}`}>{suggestion}</Link>
+              <li key={index} className="cursor-pointer py-3 hover:bg-gray-200 rounded">
+                <Link to={`/search/${suggestion?.username}`}>{
+                  (<div className='flex flex-row px-1'>
+                     <UserAvatar username={suggestion?.username} profilePic={suggestion?.profilePic} isOnline={false} width={6} hight={6} />
+                     <div className='px-2'>{suggestion?.username}</div>
+                  </div>)
+                }</Link>
               </li>
             ))}
           </ul>

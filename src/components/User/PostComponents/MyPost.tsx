@@ -124,7 +124,7 @@ import Carousel from './sliderComponent';
             
           />          */}
         <input {...getInputProps()}  className='hidden' id='imageUpload'/>
-        <span className="flex items-center hover:bg-blck hover:bg-black hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-black cursor-pointer">
+        <span className="hidden  items-center hover:bg-blck hover:bg-black hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-black cursor-pointer">
           <VideoCameraIcon
             width="24"
             height="24"

@@ -9,8 +9,8 @@ type SearchUser={
 const SearchUser = ({user}:SearchUser) => {
 
   return (
-    <div className="w-full md:w-96 h-auto relative">
-      <div className=" bg-slate-50 mt-10 px-2 py-2 rounded-lg shadow hover:shadow-xl max-w-sm mx-auto transform hover:-translate-y-[0.125rem] transition duration-100 ease-linear"  >
+    <div className="w-full  h-auto ">
+      <div className=" bg-slate-50 mt-2 px-2 py-2 rounded-lg shadow hover:shadow-xl max-w-sm mx-auto transform hover:-translate-y-[0.125rem] transition duration-100 ease-linear"  >
         <div className="w-full flex items-center justify-between">
           <span></span>
             <AddFriend userId={user?._id}/>

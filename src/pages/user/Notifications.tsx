@@ -28,7 +28,9 @@ const Notifications = () => {
     }
   };
 
-  const clearNotifications = () => {
+  const clearNotifications =async () => {
+    const {message} =await apiCalls.ClearNotifications()
+    console.log(message);
     dispatch(setNotification([]));
   };
 
@@ -43,18 +45,21 @@ const Notifications = () => {
 
   return (
     <div className='bg-gray-100 mt-5 rounded-md'>
-      <div className="flex justify-between items-center p-2">
-        <h2 className="text-lg font-medium">Notifications</h2>
-        <button className="text-sm text-gray-500 hover:text-gray-700" onClick={clearNotifications}>
-          Clear All
-        </button>
-      </div>
+    <div className="flex justify-between items-center p-2">
+      <h2 className="text-lg font-medium">Notifications</h2>
+      <button className="text-sm text-gray-500 hover:text-gray-700" onClick={clearNotifications}>
+        Clear All
+      </button>
+    </div>
+    <div className="overflow-y-scroll scrollbar-hide h-[390px]"> {/* Add max height and scroll */}
       {notifications.map((notification, index) => (
         <div className="flex flex-row justify-start md:justify-start items-center mt-6 mx-5 my-2 chat chat-start" key={index}>
-          <div className="chat-bubble ">{notification}</div>
+          <div className="bg-gray-300 rounded-full px-5 py-5 text-black">{notification}</div>
         </div>
       ))}
     </div>
+  </div>
+  
   );
 };
 

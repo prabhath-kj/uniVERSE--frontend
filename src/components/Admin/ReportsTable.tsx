@@ -97,7 +97,7 @@ const ReportTable: React.FC = () => {
           {filteredData.map((report: Report) => (
             <tr key={report?._id}>
               <td>
-                {report?.postId?.picturePath.length === 0 ? (
+                {report?.postId?.picturePath.length <= 0 ? (
                   <p>No Image</p>
                 ) : (
                   <img

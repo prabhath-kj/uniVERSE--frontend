@@ -1,10 +1,10 @@
 import NavBar from './components/User/LatoutComponents/NavBar';
 import SideBar from './components/User/LatoutComponents/SideBar';
-import Add from './components/User/Add';
 import { Outlet } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { RootState } from './state/rooState';
-import FollowSuggestions from './components/User/PostComponents/FollowSuggesions';
+import RightVerticalComponent from './components/User/PostComponents/RightVerticalComponent';
+
 
 const App = () => {
 
@@ -22,9 +22,8 @@ const isToggler=useSelector((state:RootState)=>state.user.isToggle)
         <div className="w-full sm:w-4/5 py-5 px-10  overflow-y-auto mt-12 scrollbar-hide">
           <Outlet />
         </div>
-        <div className="mt-20  hidden sm:block ">
-          <Add />
-          {/* <FollowSuggestions/> */}
+        <div className="w-4/12 mt-20  hidden sm:block ">
+         < RightVerticalComponent/>
         </div>
       </div>
     </div>

@@ -21,7 +21,9 @@ const PostComment: React.FC<Props> = ({ profilePic, username,postId ,cb}) => {
   };
 
   const validationSchema = Yup.object({
-    comment: Yup.string().required('Comment is required'),
+    comment: Yup.string()
+      .required('Comment is required')
+      .max(50, 'Comment must not exceed 50 characters'),
   });
 
   const onSubmit =async (values: { comment: string }, { resetForm }: { resetForm: () => void }) => {
