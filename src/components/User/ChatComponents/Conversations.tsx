@@ -17,7 +17,7 @@ const Conversations = ({ conversation, userId }: Props) => {
   return (
     <div>
       <div className="p-2">
-        <div className="flex items-center p-2 hover:bg-gray-300">
+        <div className="flex items-center p-2 hover:bg-gray-300 ">
           <UserAvatar
             profilePic={conver?.profilePic}
             hight={10}

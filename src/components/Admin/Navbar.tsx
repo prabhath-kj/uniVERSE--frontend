@@ -37,14 +37,14 @@ const Navbar = () => {
         <div className="w-full flex items-center gap-x-1.5 group select-none">
           <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
             <UserCircleIcon className={`w-6 h-6  ${isActive("/users")?"bg-red-400 rounded":""}`} />
-            <Link to="users">User</Link>
+            <Link to="users">Users</Link>
           </div>
         </div>
 
         <div className="w-full flex items-center gap-x-1.5 group select-none">
           <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm">
             <ChatBubbleBottomCenterIcon className={`w-6 h-6  ${isActive("/posts")?"bg-red-400 rounded":""}`} />
-            <Link to="posts">Post</Link>
+            <Link to="posts">Posts</Link>
           </div>
         </div>
         <div className="w-full flex items-center gap-x-1.5 group select-none">
@@ -54,7 +54,6 @@ const Navbar = () => {
           </div>
         </div>
         <div className="w-full pr-3 flex flex-col space-y-10">
-          <div className="pl-4 text-lg uppercase ">Settings</div>
           <div className="w-full flex items-center gap-x-1.5 group select-none">
             <div className="group-hover:bg-black w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm cursor-pointer">
               <ArrowLeftIcon className="w-6 h-6" />

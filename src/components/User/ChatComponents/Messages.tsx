@@ -11,7 +11,6 @@ interface Props {
 const Messages = ({ message, chatContainerRef ,userId}: Props) => {
   const { senderId, content, createdAt } = message;
   const isCurrentUser = senderId._id ===userId ;
-  console.log(content);
   
 
   if (!content) {
@@ -23,7 +22,7 @@ const Messages = ({ message, chatContainerRef ,userId}: Props) => {
     );
   }
   return (
-    <div className={`chat ${isCurrentUser ? "chat-end" : "chat-start" } py-2`} ref={chatContainerRef}>
+    <div className={`chat ${isCurrentUser ? "chat-end" : "chat-start" } py-2`} >
       <div className="chat-image avatar">
         <div className="w-8 rounded-full">
           <UserAvatar
@@ -39,7 +38,7 @@ const Messages = ({ message, chatContainerRef ,userId}: Props) => {
         {!isCurrentUser && senderId.username}
         <time className="text-xs opacity-50 text-black px-1">{format(createdAt)}</time>
       </div>
-      <div className="chat-bubble">{content}</div>
+      <div className="chat-bubble" ref={chatContainerRef}>{content}</div>
     </div>
   );
 };

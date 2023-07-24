@@ -31,6 +31,11 @@ GetReportedPost:async()=>{
 GetPosts:async()=>{
   const {data}= await instance.get("admin/posts")
   return data
-}
+},
+
+DismissReport:async(payaload:object)=>{
+  const {data}=await instance.post("post/report/delete",payaload)
+  return data
+},
 
 };

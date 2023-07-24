@@ -38,6 +38,14 @@ export default {
     const { data } = await instance.get("user/following/all");
     return data;
   },
+  FollowUser:async(payload:object)=>{
+    const {data}=await instance.post("user/follow",payload)
+    return data
+  },
+  UnFollowUser:async(payload:object)=>{
+    const {data}=await instance.post("user/unfollow",payload)
+    return data
+  },
   GetFollowers: async () => {
     const { data } = await instance.get("user/followers/all");
     return data;
@@ -110,6 +118,10 @@ export default {
   },
 
   // Messaging-related API calls
+  CreateConversation: async (payload:object) => {
+    const { data } = await instance.post("/conversations",payload);
+    return data;
+  },
   GetConversation: async () => {
     const { data } = await instance.get("/conversations");
     return data;
@@ -120,6 +132,10 @@ export default {
   },
   SendMessage: async (payload: object) => {
     const { data } = await instance.post(`/messages`, payload);
+    return data;
+  },
+  GetRoomMembers:async (payload: string) => {
+    const { data } = await instance.get(`/conversations/${payload}`);
     return data;
   },
 };
