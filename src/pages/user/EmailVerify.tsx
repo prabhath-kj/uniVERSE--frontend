@@ -1,6 +1,7 @@
 import { Link ,useParams} from "react-router-dom"
 import {useEffect,useState} from "react"
 import axios from "axios"
+import { BASE_URL } from "../../constants"
 
  const EmailVerify = () => {
     const [message,setMessage]=useState<string>("")
@@ -15,7 +16,7 @@ import axios from "axios"
 
     const verifyEmail=async()=>{
       try{
-          const url =`http://localhost:3000/api/auth/${params.userId}/verify/${params.token}`
+          const url =`${BASE_URL}/auth/${params.userId}/verify/${params.token}`
           const {data}=await axios.get(url)
           setMessage(data?.message)
       }catch(err){

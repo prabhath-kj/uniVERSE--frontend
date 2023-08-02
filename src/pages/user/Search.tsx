@@ -18,9 +18,7 @@ const Search = () => {
   }, [username]);
 
   const getUser = async () => {
-    const { users, message } = await ApiCalls.SearchUser({query:username});
-    console.log(users,message);
-    
+    const { users, message } = await ApiCalls.SearchUser({query:username});    
     if(message){
          setMessage(message)
          return;

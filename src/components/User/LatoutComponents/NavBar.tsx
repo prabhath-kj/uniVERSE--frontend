@@ -2,7 +2,7 @@ import { Bars3Icon,MagnifyingGlassCircleIcon} from '@heroicons/react/24/solid'
 import  {User, setSideBar } from "../../../state/user"
 import { useDispatch } from "react-redux"
 import { Link,useNavigate } from "react-router-dom"
-import { useEffect, useState,useRef ,RefObject} from 'react'
+import { useEffect, useState,useRef } from 'react'
 import BellIcon from './BellIcon'
 import apiCalls from '../../../services/user/apiCalls' 
 import UserAvatar from '../ProfileComponent/UserAvatar'
@@ -13,10 +13,10 @@ import UserAvatar from '../ProfileComponent/UserAvatar'
    const [searchQuery,setSearchQuery]=useState("")
    const [suggestions, setSuggestions] = useState<User[]>([]);
    const [hideSuggestions,setHideSuggestions]=useState(false)
-   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
+   const inputRef = useRef<HTMLInputElement | null>(null); 
    const dispatch=useDispatch()
    const Navigate=useNavigate()
-
+    
   
    useEffect(()=>{
     const handleClick=(event:any)=>{
@@ -48,6 +48,7 @@ import UserAvatar from '../ProfileComponent/UserAvatar'
         // const response = await fetch(`https://suggestqueries.google.com/complete/search?client=firefox&q=${searchQuery}`);
         // const data = await response.json();
         const {users} =await apiCalls.SearchUser({query:searchQuery})        
+        
         setSuggestions(users)
         setHideSuggestions(true);
       } catch (error) {
@@ -67,7 +68,7 @@ import UserAvatar from '../ProfileComponent/UserAvatar'
       <nav  className="w-full z-20 bg-blue-950 py-1  shadow-lg  top-0 fixed">
       <div className="w-full flex items-center justify-between mt-0 px-6 py-2">
          <label className="cursor-pointer md:hidden block">
-            <Bars3Icon className="h-6 w-6 bg-white" onClick={()=>{dispatch(setSideBar())}}/>
+            <Bars3Icon className="h-6 w-6" onClick={()=>{dispatch(setSideBar())}}/>
          </label>
          <input className="hidden" type="checkbox" id="menu-toggle"/>
          
@@ -81,21 +82,28 @@ import UserAvatar from '../ProfileComponent/UserAvatar'
         <button type="button"  className="absolute right-0 top-0 mt-3 mr-2" onClick={navigate}>
         <MagnifyingGlassCircleIcon className="w-6 h-6"/>
         </button>
-        {hideSuggestions && suggestions?.length > 0 && (
-          <ul className="ml-32 absolute left-0 right-0 bg-white rounded-b-lg mt-1 px-3 py-2 text-gray-700 shadow-lg">
-            {suggestions.map((suggestion, index) => (
-              <li key={index} className="cursor-pointer py-3 hover:bg-gray-200 rounded">
-                <Link to={`/search/${suggestion?.username}`}>{
-                  (<div className='flex flex-row px-1'>
-                     <UserAvatar username={suggestion?.username} profilePic={suggestion?.profilePic} isOnline={false} width={6} hight={6} />
-                     <div className='px-2'>{suggestion?.username}</div>
-                  </div>)
-                }</Link>
-              </li>
-            ))}
-          </ul>
-        )}
-       </div>
+        {hideSuggestions && suggestions && (
+  <ul className="ml-32 absolute left-0 right-0 bg-white rounded-b-lg mt-1 px-3 py-2 text-gray-700 shadow-lg overflow-y-auto scroll-smooth scrollbar-default max-h-60">
+    {suggestions.length === 0 ? (
+      <li className="cursor-pointer py-3 hover:bg-gray-200 rounded">
+        <div className='flex flex-row px-1'>
+          <div className='px-2'>No suggestions found</div>
+        </div>
+      </li>
+    ) : (
+      suggestions.map((suggestion, index) => (
+        <li key={index} className="cursor-pointer py-3 hover:bg-gray-200 rounded">
+          <Link to={`/search/${suggestion?.username}`}>
+            <div className='flex flex-row px-1'>
+              <UserAvatar username={suggestion?.username} profilePic={suggestion?.profilePic} isOnline={false} width={6} hight={6} />
+              <div className='px-2'>{suggestion?.username}</div>
+            </div>
+          </Link>
+        </li>
+      ))
+    )}
+  </ul>
+)} </div>
          </ul>
             </nav>
          </div>

@@ -54,7 +54,7 @@ const ShowComment = ({ postId, currentUser,newComment }: Props) => {
       }
       setComments(comments);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -70,60 +70,49 @@ const ShowComment = ({ postId, currentUser,newComment }: Props) => {
         </button>
       ),
       onClose: () => {
-        console.log('Toast closed without confirming');
       },
     });
   };
 
   const confirmDelete = async (id: string) => {
     try {
-      console.log('Deleting comment...', id);
-      const { message } = await apiCalls.DeleteComment({ id: id });
-      console.log(message);
+      await apiCalls.DeleteComment({ id: id });
       getComments()
       toast.dismiss();
     } catch (error) {
-      console.log(error);
       toast.error('Failed to delete comment.');
     }
   };
 
   const handleLike = async (id: string) => {
     try {
-      const {  message}=await apiCalls.LikeComment({ commentId: id });
-      console.log(message);
+     await apiCalls.LikeComment({ commentId: id });
       
       getComments()
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const handleReplySubmit = async (commentId: string) => {
     try {
-      if(replyText.trim()=="")return null
-      console.log('Replying to comment', commentId, ':', replyText);
-      
+      if(replyText.trim()=="")return null      
       const value={
         commentId:commentId,
         reply:replyText
       }
 
-      const {message} =await apiCalls.ReplyComment(value)
-      console.log(message);
-      
+      await apiCalls.ReplyComment(value)      
       getComments()
       setReplyText('');
       // Implement your API call or any other actions for submitting the reply
     } catch (error) {
-      console.log(error);
       toast.error('Failed to submit reply.');
     }
   };
 
 
   const renderComments = (comments: Comment[]) => {
-    console.log(comments);
     
     return comments.map((comment) => (
       <div key={comment._id} className=" my-3 p-4 border rounded-lg bg-white shadow-sm">

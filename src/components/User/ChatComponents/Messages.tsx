@@ -9,11 +9,12 @@ interface Props {
 }
 
 const Messages = ({ message, chatContainerRef ,userId}: Props) => {
+  
   const { senderId, content, createdAt } = message;
   const isCurrentUser = senderId._id ===userId ;
   
 
-  if (!content) {
+  if (!message) {
     return (
       <div className="badge badge-info px-3 py-3 h-auto w-full mt-4">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -36,9 +37,11 @@ const Messages = ({ message, chatContainerRef ,userId}: Props) => {
       </div>
       <div className="chat-header text-black">
         {!isCurrentUser && senderId.username}
-        <time className="text-xs opacity-50 text-black px-1">{format(createdAt)}</time>
+        <time className="text-xs opacity-50 text-black ">{format(createdAt)}</time>
       </div>
-      <div className="chat-bubble" ref={chatContainerRef}>{content}</div>
+      <div className="chat-bubble w-30 rounded-full px-5 py-2 bg-gray-500 ">
+      <div className="text-start break-words text-black font-normal text-base" ref={chatContainerRef}>{content}</div>
+      </div>
     </div>
   );
 };

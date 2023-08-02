@@ -6,9 +6,11 @@ import { Conversation } from "../../../pages/user/Chat";
 interface Props {
   conversation: Conversation;
   userId: string|undefined;
+  onlineUser:string[]
 }
 
-const Conversations = ({ conversation, userId }: Props) => {
+const Conversations = ({ conversation, userId ,onlineUser}: Props) => {
+  
     const [conver] = useState(
         conversation && conversation.participants.find((p) => p._id !== userId)
       );
@@ -22,7 +24,7 @@ const Conversations = ({ conversation, userId }: Props) => {
             profilePic={conver?.profilePic}
             hight={10}
             width={10}
-            isOnline={true}
+            isOnline={onlineUser?.includes(conver?._id??"")}
             username={conver?.username}
           />
           <div className="ml-2">

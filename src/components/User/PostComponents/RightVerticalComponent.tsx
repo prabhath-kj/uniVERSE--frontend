@@ -22,9 +22,8 @@ const RightVerticalComponent: React.FC = () => {
       setFollowing(response);
     } catch (error: any) {
       const { response } = error;
-      const { data, status } = response;
-      console.log(data,status);
-      
+       console.error(response);
+             
     }
   };
 
@@ -38,15 +37,15 @@ const RightVerticalComponent: React.FC = () => {
   };
 
   return (
-    <div className="flex-col bg-white mr-2 rounded-lg mt-1">
-      <h2 className="text-xl font-bold mb-1">Followers: {followersNo}</h2>
-      <div className="overflow-y-scroll scrollbar-default h-44 px-2  mb-2">
+    <div className="flex-col bg-inherit mr-4 rounded-lg mt-1">
+      <h2 className="text-xl font-medium mb-1">Followers  {followersNo}</h2>
+      <div className="overflow-y-scroll scrollbar-default h-44 pl-3 shrink-0  mb-2">
         {followers.map((follower, index) => (
           <SearchUser key={index} user={follower} />
         ))}
       </div>
-      <h2 className="text-xl font-bold mb-1">Following: {followingNo}</h2>
-      <div className="overflow-y-scroll scrollbar-default h-44 px-2 ">
+      <h2 className="text-xl font-medium mb-1">Following  {followingNo}</h2>
+      <div className="overflow-y-scroll scrollbar-default h-44 pl-3 ">
         {following.map((followedUser, index) => (
           <SearchUser key={index} user={followedUser} />
         ))}

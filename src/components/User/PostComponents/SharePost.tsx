@@ -14,12 +14,11 @@ const SharePost = ({ postId, picture }: SharePostProps) => {
           text: "hiiiii",
           url: `/posts/${postId}`,
         });
-        console.log('Post shared successfully');
       } catch (error) {
         console.error('Error sharing post:', error);
       }
     } else {
-      console.log('Web Share API not supported');
+      console.error('Web Share API not supported');
     }
   };
 

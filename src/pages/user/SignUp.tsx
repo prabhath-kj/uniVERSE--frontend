@@ -66,6 +66,7 @@ const SignUp = () => {
   const handleSubmit = async (values: SignUpFormValues) => {
     try {
       const {message,error} = await ApiCalls.Register(values);
+      
         if (message) {
          toast(message, {
           position: 'top-right',

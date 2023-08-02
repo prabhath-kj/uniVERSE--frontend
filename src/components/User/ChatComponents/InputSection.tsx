@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect ,useRef} from "react";
 import { User } from "../../../state/user";
 import apiCalls from "../../../services/user/apiCalls";
 import UserAvatar from "../ProfileComponent/UserAvatar";
@@ -8,7 +8,8 @@ const InputSection = ({ userId,setConversation }: { userId: string,setConversati
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<User[]>([]);
   const [hideSuggestions, setHideSuggestions] = useState(false);
-
+  const inputRef = useRef<HTMLInputElement | null>(null); 
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       getSuggestion();
@@ -18,6 +19,20 @@ const InputSection = ({ userId,setConversation }: { userId: string,setConversati
       clearTimeout(timer);
     };
   }, [searchQuery]);
+
+  useEffect(()=>{
+    const handleClick=(event:any)=>{
+        if(inputRef?.current&&!inputRef?.current?.contains(event.target)){
+         setHideSuggestions(false)
+        }
+    }
+    document.addEventListener('click', handleClick)
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+   })
+    
 
   const getSuggestion = async () => {
     try {
@@ -53,15 +68,15 @@ const InputSection = ({ userId,setConversation }: { userId: string,setConversati
     <div className="relative px-2 py-2">
       <input
         type="text"
-        placeholder="Chat"
+        placeholder="Search"
         className="w-full bg-inherit h-10 rounded border-black border-b-2 outline-none"
         value={searchQuery}
         onChange={({ target }) => { setSearchQuery(target.value); setHideSuggestions(false); }}
         onFocus={()=>{setHideSuggestions(true)}}
-        // onBlur={()=>{setHideSuggestions(false)}}
+        ref={inputRef}
       />
       {hideSuggestions && suggestions?.length > 0 && (
-        <ul className="absolute left-0 w-full bg-white rounded-b-lg mt-1 px-3 py-2 text-gray-700 shadow-lg z-10">
+        <ul className="absolute left-0 w-full bg-white rounded-b-lg mt-1 px-3 py-2 text-gray-700 shadow-lg z-10 overflow-y-scroll scrollbar-default max-h-36">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}

@@ -12,6 +12,8 @@ import ErrorElement from "../../pages/ErrorElement";
 import ForgotPassword  from "../../pages/user/ForgotPassword";
 import Notifications from "../../pages/user/Notifications";
 import Chat from "../../pages/user/Chat";
+import VideoRoom from "../../pages/user/VideoRoom";
+import Settings from "../../pages/user/Settings";
 
 
  export const userRoutes =
@@ -52,6 +54,14 @@ import Chat from "../../pages/user/Chat";
        path:"chat",
        element:<Chat/>
       },
+      {
+       path:"videoChat/:id",
+       element:<VideoRoom/>
+      },
+      {
+        path:"settings",
+        element:<Settings/>
+       },
   
     ],
   }

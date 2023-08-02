@@ -29,8 +29,7 @@ const Notifications = () => {
   };
 
   const clearNotifications =async () => {
-    const {message} =await apiCalls.ClearNotifications()
-    console.log(message);
+    await apiCalls.ClearNotifications()
     dispatch(setNotification([]));
   };
 

@@ -1,12 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import Conversations from "../../components/User/ChatComponents/Conversations";
 import Messages from "../../components/User/ChatComponents/Messages";
 import apiCalls from "../../services/user/apiCalls";
 import { RootState } from "../../state/rooState";
 import { useSelector } from "react-redux";
-import {PaperAirplaneIcon} from '@heroicons/react/24/solid'
-import {Socket, connect, io} from "socket.io-client";
+import {PaperAirplaneIcon,VideoCameraIcon} from '@heroicons/react/24/solid'
+import {Socket, connect} from "socket.io-client";
 import InputSection from "../../components/User/ChatComponents/InputSection";
+import { useNavigate } from "react-router-dom";
+import { SOCKET_URL } from "../../constants";
 
 export interface Conversation {
   _id: string;
@@ -45,16 +47,12 @@ const Chat = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [newMessage, setNewMessage] = useState("");
   const user = useSelector((state: RootState) => state.user.user);
+  const Navigate=useNavigate()
 
-  
-
- 
-  
-  
   
   useEffect(() => {
     
-    socket.current = connect("http://localhost:3000");
+    socket.current = connect(SOCKET_URL);
     
   }, []);
 
@@ -74,7 +72,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket?.current?.emit("add:user", {userId:user?._id});
-    socket?.current?.on("get:users", (users) => {
+    socket?.current?.on("get:users", (users) => {      
      setOnlineUsers(users
       .filter((u: { userId: never, socketId: string }) => {
         return user?.following?.includes(u?.userId); 
@@ -98,7 +96,7 @@ const Chat = () => {
       
       setConversations(conversations);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -107,7 +105,7 @@ const Chat = () => {
       const { messages } = await apiCalls.GetMessages(conversationId);
       setMessages(messages);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -161,7 +159,36 @@ useEffect(() => {
       console.log(error);
     }
   };
-
+  const handleJoin=async(selectedConversation:string)=>{
+    if(selectedConversation){
+      const url="https://uniiverse.online/videoChat/"+selectedConversation
+      try {
+        const data={
+          content:url,
+          conversationId:selectedConversation
+        }  
+        const rtData={
+          content:url,
+          senderId:{
+            _id:user?._id,
+            profilePic:user?.profilePic,
+            username:user?.username,
+          },
+          receiverId:reciever,
+          createdAt:new Date(Date.now()),
+          room:selectedConversation
+        }
+        socket?.current?.emit("send:message",rtData);
+        await apiCalls.SendMessage(data);
+        fetchMessages(selectedConversation)
+      } catch (error) {
+        console.log(error);
+      }finally{
+        Navigate(`/videoChat/${selectedConversation}`)
+      }
+    }
+    return
+  }
 
  
  
@@ -173,11 +200,14 @@ useEffect(() => {
         </div>
         {conversations.map((conversation: Conversation) => (
           <div key={conversation?._id} onClick={() => invokeChat(conversation?._id)} className="cursor-pointer">
-            <Conversations conversation={conversation} userId={user?._id} />
+            <Conversations conversation={conversation} userId={user?._id} onlineUser={onlineUsers}/>
           </div>
         ))}
       </div>
       <div className="flex-1 flex flex-col justify-between">
+       {selectedConversation && <div className="w-full h-10 flex items-center justify-end pr-2">
+          <VideoCameraIcon className="w-6 h-6 text-black  text-end cursor-pointer" onClick={()=>{handleJoin(selectedConversation)}}/>
+       </div>}
         <div className="p-4 overflow-y-auto scrollbar-hide scroll-smooth flex-1">
           <>
           {selectedConversation?
@@ -197,14 +227,14 @@ useEffect(() => {
         </div>
         {
           selectedConversation&&(
-            <div className="flex flex-row bg-gray-500  px-2 py-2 shadow">
+            <div className="flex flex-row bg-gray-500 px-1 py-2 shadow">
             <input
               placeholder="Type your message..."
               className="flex-1 textarea textarea-bordered textarea-sm  px-1 py-1"
               value={newMessage}
               onChange={handleNewMessageChange}
             ></input>
-            <button className="ml-5 text-black" >
+            <button className=" text-black" >
           <PaperAirplaneIcon className="w-8 h-8" onClick={handleSendMessage}/>
           </button>
            </div>

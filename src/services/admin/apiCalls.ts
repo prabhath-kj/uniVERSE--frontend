@@ -8,7 +8,10 @@ AdminLogin: async (payload:object) => {
   const response = await instance.post("admin/login", payload);
   return response.data;
 },
-
+GetCurrentActivites:async()=>{
+  const response = await instance.get("admin/activity");
+  return response.data;
+},
 GetAllUsers:async()=>{
   const response = await instance.get("admin/users");
   return response.data;

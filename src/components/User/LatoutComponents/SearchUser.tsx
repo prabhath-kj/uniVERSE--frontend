@@ -13,7 +13,7 @@ const SearchUser = ({user}:SearchUser) => {
       <div className=" bg-slate-50 mt-2 px-2 py-2 rounded-lg shadow hover:shadow-xl max-w-sm mx-auto transform hover:-translate-y-[0.125rem] transition duration-100 ease-linear"  >
         <div className="w-full flex items-center justify-between">
           <span></span>
-            <AddFriend userId={user?._id}/>
+            <AddFriend userId={user?._id??""}/>
            </div>
         <div className="flex items-center  rounded-lg py-1 cursor-pointer" >
           <UserAvatar profilePic={user?.profilePic} username={user?.username} isOnline={true} hight={12} width={12}/>

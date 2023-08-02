@@ -47,7 +47,7 @@ const PostMenu = ({ postId, savedBy, postedUser, currentUser ,isDeleted}: Props)
           });
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
   };
@@ -65,7 +65,7 @@ const PostMenu = ({ postId, savedBy, postedUser, currentUser ,isDeleted}: Props)
       setIsSaved(current);
 
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

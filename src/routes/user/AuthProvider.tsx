@@ -21,8 +21,7 @@ const AuthProvider = ({ children }:AuthProviderProps) => {
 
   const  fetchUserBlockedStatus=async()=>{
      try {
-      const {message}=await apiCalls.ValidUser()
-      console.log(message);
+      await apiCalls.ValidUser()
       
      } catch (error) {
         dispatch(setLogout())

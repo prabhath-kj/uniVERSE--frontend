@@ -14,6 +14,18 @@ export default {
     const response = await instance.post("user/login", payload);
     return response.data;
   },
+  RecoverPassword: async (payload: object) => {
+    const response = await instance.post("user/recoverPassword", payload);
+    return response.data;
+  },
+  ChangePassword:async(payload:object)=>{
+    const response=await instance.post("user/changePassword",payload)
+    return response.data
+  },
+  VerifyOtp: async (payload: object) => {
+    const response = await instance.post("user/verifyOtp", payload);
+    return response.data;
+  },
   GoogleLogin: async (payload: object | undefined) => {
     const response = await instance.post("auth/google/login", payload);
     return response.data;

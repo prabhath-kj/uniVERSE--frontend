@@ -43,6 +43,7 @@ export interface AuthState {
   isToggle:Boolean;
   isVisible:string[];
   commentLength:{[key: string]: number;};
+  isOnline:string[];
 }
 
 const initialState: AuthState = {
@@ -53,6 +54,7 @@ const initialState: AuthState = {
   isVisible:[],
   notifications:[],
   commentLength:{},
+  isOnline:[],
 };
 
 const userSlice = createSlice({
@@ -122,10 +124,13 @@ const userSlice = createSlice({
     setCommentLength:(state,action)=>{
      state.commentLength={...state.commentLength,...action.payload}
     },
+    setIsOnline:(state,action)=>{
+     state.isOnline=action.payload
+    },
   },
 });
 
 
 export const { setLogin, setPosts, setPost,setSideBar,setFollowers,setCommentLength,
-              setFollowing,setNotification,setLogout,setComment} = userSlice.actions;
+              setFollowing,setNotification,setLogout,setComment,setIsOnline} = userSlice.actions;
 export default userSlice.reducer;

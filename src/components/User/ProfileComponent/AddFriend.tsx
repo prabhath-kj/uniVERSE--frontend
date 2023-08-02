@@ -5,18 +5,22 @@ import apiCalls from "../../../services/user/apiCalls";
 import { setFollowing } from "../../../state/user";
 import {toast}  from "react-toastify"
 
-const AddFriend = ({ userId }: any) => {
+interface props{
+  userId:string
+}
+const AddFriend = ({ userId }: props) => {
   const dispatch = useDispatch();
   const currentUser =useSelector((state:RootState)=>state.user.user?._id)
-  const following = useSelector((state: RootState) => state.user.user?.following?.includes(userId));
+  const following = useSelector((state: RootState) => state.user.user?.following) as string[];
 
+  const isFollowing = following?.includes(userId);
   const handleFollow = async () => {
     try {
       const { following, message } = await apiCalls.FollowUser({ userId: userId });
       dispatch(setFollowing(following));
       toast(message,{position:"top-center"})
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -26,7 +30,7 @@ const AddFriend = ({ userId }: any) => {
       dispatch(setFollowing(following));
       toast(message,{position:"top-center"})
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -36,7 +40,7 @@ const AddFriend = ({ userId }: any) => {
 
   return (
     <>
-      {following ? (
+      {isFollowing ? (
         <UserMinusIcon className="w-6 h-6 cursor-pointer text-black dark:md:hover:text-gray-600 " onClick={handleUnfollow} />
       ) : (
         <UserPlusIcon className="w-6 h-6 cursor-pointer  text-black dark:md:hover:text-gray-600" onClick={handleFollow} />

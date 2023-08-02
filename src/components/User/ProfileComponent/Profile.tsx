@@ -10,7 +10,6 @@ import apiCalls from "../../../services/user/apiCalls";
 
 const Profile = () => {
   const { username } = useParams();
-  console.log(username);
   
   const [posts, setPosts] = useState<Post[]>([]);
   const currentUser = useSelector((state: RootState) => state.user.user);
@@ -35,7 +34,7 @@ const Profile = () => {
           const {user} = await apiCalls.GetUser(username);
           setProfileUser(user);
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       };
       fetchProfileUser();
@@ -60,7 +59,7 @@ const Profile = () => {
           <Link to="/profile/edit">
             <PencilSquareIcon className="w-6 h-6 absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
           </Link>
-        ):(<div className="absolute top-0 right-0 m-4 "><AddFriend userId={profileUser?._id}  /></div>)}
+        ):(<div className="absolute top-0 right-0 m-4 "><AddFriend userId={profileUser?._id??""}  /></div>)}
         <div className="text-center mt-2 text-3xl font-medium">{profileUser?.username}</div>
         <div className="text-center mt-2 font-light text-sm">{profileUser?.email}</div>
         <div className="px-6 text-center mt-2 font-light text-sm">
